@@ -1,231 +1,200 @@
 <!DOCTYPE html>
+<html class="ui-mobile">
+<head>
+<title>Scavenger Mobile</title>
 
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
-		 <link rel="stylesheet" type="text/css"  href="css/input_areas.css">
-			<link rel="stylesheet" type="text/css" href="css/tabs.css" />
-			<link rel="stylesheet" type="text/css" href="css/buttons.css" />
-  			<!--<link rel="stylesheet" type="text/css" href="css/switches.css" />-->
-        <title>Hello World</title>
-	        <script type="text/javascript" src="cordova-2.2.0.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-		
-	  <script type="text/javascript" charset="utf-8">
-
-    var pictureSource;   // picture source
-    var destinationType; // sets the format of returned value 
-
-    // Wait for PhoneGap to connect with the device
-    //
-    document.addEventListener("deviceready",onDeviceReady,false);
-
-    // PhoneGap is ready to be used!
-    //
-    function onDeviceReady() {
-        pictureSource=navigator.camera.PictureSourceType;
-        destinationType=navigator.camera.DestinationType;
-    }
-
-    // Called when a photo is successfully retrieved
-    //
-    function onPhotoDataSuccess(imageData) {
-      // Uncomment to view the base64 encoded image data
-      // console.log(imageData);
-
-      // Get image handle
-      //
-	  
-      var smallImage = document.getElementById('smallImage');
-
-      // Unhide image elements
-      //
-      smallImage.style.display = 'block';
-
-      // Show the captured photo
-      // The inline CSS rules are used to resize the image
-      //
-      smallImage.src = "data:image/jpeg;base64," + imageData;
-    }
-
-    // Called when a photo is successfully retrieved
-    //
-    function onPhotoURISuccess(imageURI) {
-      // Uncomment to view the image file URI 
-      // console.log(imageURI);
-
-      // Get image handle
-      //
-      var largeImage = document.getElementById('largeImage');
-
-      // Unhide image elements
-      //
-      largeImage.style.display = 'block';
-
-      // Show the captured photo
-      // The inline CSS rules are used to resize the image
-      //
-      largeImage.src = imageURI;
-    }
-
-    // A button will call this function
-    //
-    function capturePhoto() {
-      // Take picture using device camera and retrieve image as base64-encoded string
-      navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 10
-	  destinationType: Camera.DestinationType.FILE_URI,
-      sourceType: Camera.PictureSourceType.SAVEDPHOTOALBUM,
-      encodingType: Camera.EncodingType.JPEG,
-      targetWidth: 300,
-      targeHeight: 300,
-	  
-	   });
-	  alert("success");
-    }
-
-    // A button will call this function
-    //
-    function capturePhotoEdit() {
-      // Take picture using device camera, allow edit, and retrieve image as base64-encoded string  
-      navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 20, allowEdit: true }); 
-    }
-
-    // A button will call this function
-    //
-    function getPhoto(source) {
-      // Retrieve image file location from specified source
-      navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50, 
-        destinationType: destinationType.FILE_URI,
-        sourceType: source });
-    }
-
-    // Called if something bad happens.
-    // 
-    function onFail(message) {
-      alert('Failed because: ' + message);
-    }
-
-    </script>	
-		
-    </head>
-    <body>
-  <!--
-    This <style> and <link> is only used for the example code, is no needed for the real case use
-  -->
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-size: 10px;
-      background-color: #fff;
-    }
-    body { background: none; }
-    h2.bb-docs {
-      padding: 0.4rem 3rem;
-      margin: -0.1rem 0 0;
-      border: solid 0.1rem #e8e8e8;
-      color: #666;
-      font-size: 1.8rem;
-      font-family: "MozTT", Sans-serif;
-      font-weight: lighter;
-      background-color: #f5f5f5;
-    }
-   form { margin: 1rem 0rem; }
-   
-       /* icons */
-    #panel1 a:after {
-	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeBAMAAADJHrORAAAAJFBMVEX///+Tk5P////+/v6Li4uXl5eYmJjExMTb29vh4eGMjIwzMzN2iWxPAAAAAXRSTlMAQObYZgAAAEpJREFUeF7NyTERwCAQRNGdiEjBNdGAhRg4CXjBAGK4oThz1LsCGH735uOOhvgVWxOHOF0c4nTxEv8feVb6vGG8YbxReKPzxoNDbWgJECUhWu4GAAAAAElFTkSuQmCC);
-
-    }
-
-    #profile-tab a:after {
-      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAB4CAYAAADogzKiAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QUU2QzI0RDUwQzBDMTFFMjk5NTZBOEE4MUY4QjNCN0EiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QUU2QzI0RDYwQzBDMTFFMjk5NTZBOEE4MUY4QjNCN0EiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpBRTZDMjREMzBDMEMxMUUyOTk1NkE4QTgxRjhCM0I3QSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpBRTZDMjRENDBDMEMxMUUyOTk1NkE4QTgxRjhCM0I3QSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PrKUdlEAAANNSURBVHja7JnPaxNBFMfTGNT2ZISAhRiPCnqSVLCCoKdeDIh4awQVghfv4h/gwaOIxYNW9GLpQUgPPRQqeIitGi9NbW/SqjGQg4I2tBJZvw/e4naZXzu79kecgS9td9+8z87M29n9dvs8z0v9y9bnAA6wpYAB6Bj/vgx1jHoRQKMsNAateX/bGh/L6vrrkuegJU/eljjGGjDh6dukKodqDfLQKq2TbpahI9An0cm0ouMZg+QpjhmWnVQB+iNUY78NYCECYMGmTGl9GgaL3OBYqyoahjYUyTc4xrpMSeegFUHyFT6Xsi3TYNsPXYBO8N8NaApa3/bNTlZFGajC1VFW9B/l0VS4j1EVFaB6YK67UFkQN8rn/FbnvspFzkNNwYKGIeVQcr81OYcUMKsoSR8iS+63WRmgaHBTdTXJ/Vb08wYXecigKPawdG1IVEX7EqzOvSLAjwQBP0WALwkCmiLAhwQBy7Kt4it0KGbyFjQo2ypmErj6GdVe9DwBwIRqN6UH+IGYgO/8puHerh3AARxg5wGuv+5YJXh0ekB5PhMhl5VPThvEZKExqA3VWW0+lo0LyEE16AaPIDgaOlbD1ObiAO4HpkXU6NwDWwD55MsGU3gJozhsA3A+WQt4Dy0aJF/k2MgAj73XL0UMnavgbvZsy5TugRH+r0u40bERJK/F3SpeQkdtfbLpXkSJJllb65NxkzWgCpQxBRSgeeghT8m4BEIm/Al0nGPnASnoALQ9zEEnQ8YvDClz8qAhpD5zgORVa/A0aB4EEL+NS9zmIOc4L3qiFfHjrWbNfgeAShuL8n0XniLnk3vUJ6dDm1crgeQtVNDH3vHJ4Tt5GjqYgE92r+8O4AAO4ADCViqVNvnkarXaSQSAxOSF70BXAla2wy9YtwH6Zg1AcvLArxRWlp69ZwFpb5tPlo4AVx/pezJG4b4n7zafjEUz9skcG71M0VHrkzkm3laBkhV+T0by9Z252eGK6ZXyGnQTuosrfSYZGVnZW9A96DHiuloAOpHXfRGwsmT8roYhnDxoZamSLiJuVQrg7eGNwMpugiCuLLGy9B3uFOI+W/lkJLb3yeicqE/GKJxP/l98cvg+SOR7Miqoh74nO5/sALsA8EeAAQCMPMLp3+w1fQAAAABJRU5ErkJggg==);
-    }
-
-    #panel3 a:after {
-      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAB4CAYAAADogzKiAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QUU2QzI0RDEwQzBDMTFFMjk5NTZBOEE4MUY4QjNCN0EiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QUU2QzI0RDIwQzBDMTFFMjk5NTZBOEE4MUY4QjNCN0EiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpBRTZDMjRDRjBDMEMxMUUyOTk1NkE4QTgxRjhCM0I3QSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpBRTZDMjREMDBDMEMxMUUyOTk1NkE4QTgxRjhCM0I3QSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PlXYxucAAAEmSURBVHja7JZNDsFQFEZLjOxGB8Qmugnr0AHrsAcpe/AzqA1gYNIJhiYkdV/y6M3LaySlSSPnJVdaX/XQ9sjXyvM8qHO1g5oXAAAACkBfJncmVcdNPPlE5akn72vA2QO/qO1P+dWTnzXgJHN3DjiWbL/WQW3vnexuz/kGPGTmzgELtb+WydR+Zt97raXzBef2nEGLf1M8wAM8wAM8wAMAAAAAAACgMYCOeRmtbqbDbJxsJxOqXjR28qlMPBt2zedNL+o5+UCyLb2otBfJ5Sl6kVzDyjfR3AM8+N4D2+UreWA9wgM8wAM8+NoDHlMAAAAAAACgGb0oiiJvL0qSJLS5txdJHtvc24sk/5deJD/l573InpNehAd4gAd4gAd4AADA3wCeAgwA2E15Rlze638AAAAASUVORK5CYII=);
-    }
-	#panel2 a:after {
-      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAB4CAYAAADogzKiAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QUU2QzI0RDEwQzBDMTFFMjk5NTZBOEE4MUY4QjNCN0EiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QUU2QzI0RDIwQzBDMTFFMjk5NTZBOEE4MUY4QjNCN0EiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpBRTZDMjRDRjBDMEMxMUUyOTk1NkE4QTgxRjhCM0I3QSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpBRTZDMjREMDBDMEMxMUUyOTk1NkE4QTgxRjhCM0I3QSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PlXYxucAAAEmSURBVHja7JZNDsFQFEZLjOxGB8Qmugnr0AHrsAcpe/AzqA1gYNIJhiYkdV/y6M3LaySlSSPnJVdaX/XQ9sjXyvM8qHO1g5oXAAAACkBfJncmVcdNPPlE5akn72vA2QO/qO1P+dWTnzXgJHN3DjiWbL/WQW3vnexuz/kGPGTmzgELtb+WydR+Zt97raXzBef2nEGLf1M8wAM8wAM8wAMAAAAAAACgMYCOeRmtbqbDbJxsJxOqXjR28qlMPBt2zedNL+o5+UCyLb2otBfJ5Sl6kVzDyjfR3AM8+N4D2+UreWA9wgM8wAM8+NoDHlMAAAAAAACgGb0oiiJvL0qSJLS5txdJHtvc24sk/5deJD/l573InpNehAd4gAd4gAd4AADA3wCeAgwA2E15Rlze638AAAAASUVORK5CYII=);
-    }
-  </style>
-</head>
+<script type="text/javascript" charset="utf-8"
+	src="libs/cordova-2.2.0.js"></script>
+<script type="text/javascript" charset="utf-8"
+	src="libs/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" charset="utf-8"
+	src="libs/jquery.mobile-1.1.1.min.js"></script>
+<script type="text/javascript" charset="utf-8"
+	src="libs/cdv-plugin-fb-connect.js"></script>
+<script type="text/javascript" charset="utf-8"
+	src="libs/facebook_js_sdk.js"></script>
 
 
+<link rel="stylesheet" type="text/css"
+	href="css/jquery.mobile-1.1.1.min.css" />
 
+<style>
+.ui-navbar li .ui-btn-icon-top .ui-btn-inner {
+	padding-top: .7em;
+}
+</style>
 
+<script type="text/javascript" charset="utf-8">
+var pictureSource;   // picture source
+var destinationType; // sets the format of returned value 
 
-<body role="application">
- 
-     
- 
+// Wait for Cordova to connect with the device
+//
+document.addEventListener("deviceready",onDeviceReady,false);
 
+// Cordova is ready to be used!
+function onDeviceReady() {
+    pictureSource=navigator.camera.PictureSourceType;
+    destinationType=navigator.camera.DestinationType;
+}
 
+// Called when a photo is successfully retrieved
+//
+function onPhotoDataSuccess(imageData) {
+// Uncomment to view the base64 encoded image data
+   console.log(imageData);
+// alert(imageData);
 
-    <h2 class="bb-docs">Give away your unwanted stuff</h2>
-    <form>
-      <p>
-        <input type="text" placeholder="Title" required>
-        <button type="reset">Clear</button>
-      </p>
+  var smallImage = document.getElementById('smallImage');
 
-      <p>
-        <textarea type="text" placeholder="Description"  value="Some written text" required></textarea>
-        <button type="reset">Clear</button>
-      </p>
-     <fieldset>
-  <label>
-    <input type="radio" data-type="switch" value="b" checked>
-    <span>Baby Items (0 - 2 years)</span>
-  </label>
-  <label>
-    <input type="radio" data-type="switch" value="c">
-    <span>Books/CDs/DVDs/VHS/Vinyl</span>
-  </label> 
-</fieldset>
-    <button onclick="capturePhoto();">Capture Photo</button> <br>&nbsp;
-    <button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From Photo Library</button><br>
-    <img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
-    <img style="display:none;" id="largeImage" src="" />
-<p>
-			<button type="submit">Offer</button>  </p>
-    </form>
+  smallImage.style.display = 'block';
+  $('#smallImage').attr("src","data:image/jpeg;base64," + imageData);
+}
 
-	
-	
-
+// Called when a photo is successfully retrieved
+//
+function onPhotoURISuccess(imageURI) {
+  // Uncomment to view the image file URI 
+  // console.log(imageURI);
   
+  var largeImage = document.getElementById('largeImage');
+  largeImage.style.display = 'block';
+  
+  // Show the captured photo
+  // The inline CSS rules are used to resize the image
+  largeImage.src = imageURI;
+}
+
+function onFail(message) {
+  alert('Failed because: ' + message);
+}
+  
+/********************
+Apply behaviours to view 
+*********************/  
+$(document).ready(function() {
+   $("#photo-get-new").click(function() {
+       navigator.camera.getPicture(onPhotoDataSuccess, onFail, { 
+	   												   quality: 5,  
+      												   targetWidth: 100,
+ 													   targetHeight: 100, 
+        											   destinationType: destinationType.DATA_URL 
+													   }); //getpicture
+   }); //click
+   $("#photo-get-existing").click(function() {
+	   navigator.camera.getPicture(onPhotoURISuccess, onFail, { 
+    											 	  quality: 50, 
+    												  destinationType: destinationType.FILE_URI,
+     											 	  sourceType: pictureSource.PHOTOLIBRARY
+	   });
+	});
+});
+    </script>
+</head>
+<body>
+
+	<div id="login"></div>
+	<div data-role="page" id="give">
+		<div data-theme="a" data-role="header" data-position="fixed">
+			<h1>Scavenger Mobile v0.1</h1>
+			<div data-role="navbar" data-iconpos="top">
+				<ul>
+					<li><a href="#give" data-theme="" data-icon=""
+						class="ui-btn-active ui-state-persist"> Give </a></li>
+					<li><a href="#take" data-theme="" data-icon=""> Take </a></li>
+					<li><a href="#profile" data-theme="" data-icon=""> Profile
+					</a></li>
+				</ul>
+			</div>
+		</div>
+		<div data-role="content">
+			<a href="facebook.html" data-role="button">Facebook login</a>
+			<form action="">
+				<div data-role="fieldcontain">
+					<fieldset data-role="controlgroup" data-mini="true">
+						<img src="http://codiqa.com/static/images/v2/image.png"
+							alt="image" /> <img
+							style="display: none; width: 60px; height: 60px;" id="smallImage"
+							src="" /> <img id="item-thumbnail"
+							style="display: none; width: 60px; height: 60px;" id="smallImage"
+							src="" /> <a id="photo-get-new" data-role="button"
+							data-inline="true" data-transition="none" href="#page1"> New
+						</a> <a id="photo-get-existing" data-role="button" data-inline="true"
+							data-transition="none" href="#page1"> Existing </a>
+					</fieldset>
+				</div>
+				<div data-role="fieldcontain">
+					<fieldset data-role="controlgroup" data-mini="true">
+						<label for="textinput2"> </label> <input name="" id="textinput2"
+							placeholder="Title" value="" type="text" />
+					</fieldset>
+				</div>
+				<div data-role="fieldcontain">
+					<fieldset data-role="controlgroup">
+						<label for="textarea1"> </label>
+						<textarea name="" id="textarea1" placeholder="Description"
+							data-rows="20">
+                            </textarea>
+					</fieldset>
+				</div>
+				<div data-role="collapsible-set">
+					<div data-role="collapsible" data-collapsed="true">
+						<h3>Advanced Options</h3>
+						<div data-role="fieldcontain">
+							<label for="selectmenu1"> </label> <select name=""
+								data-mini="true">
+								<option value="option1">Baby Items (0 - 2 years)</option>
+							</select>
+						</div>
+						<div data-role="fieldcontain">
+							<fieldset data-role="controlgroup" data-mini="true">
+								<label for="slider1"> Remove my item after </label> <input
+									type="range" name="slider" value="30" min="0" max="60"
+									data-highlight="true" />
+							</fieldset>
+						</div>
+					</div>
+				</div>
+				<input type="submit" data-theme="b" data-icon="arrow-r"
+					data-iconpos="right" value="Offer this now" />
+			</form>
+		</div>
+	</div>
 
 
+	<div data-role="page" id="take">
+		<div data-theme="a" data-role="header" data-position="fixed">
+			<h1>Scavenger Mobile v0.1</h1>
+			<div data-role="navbar" data-iconpos="top">
+				<ul>
+					<li><a href="#give" data-theme="" data-icon=""> Give </a></li>
+					<li><a href="#take" data-theme="" data-icon=""
+						class="ui-btn-active ui-state-persist"> Take </a></li>
+					<li><a href="#profile" data-theme="" data-icon=""> Profile
+					</a></li>
+				</ul>
+			</div>
+		</div>
+		<div data-role="content">Take</div>
+	</div>
 
+	<div data-role="page" id="profile">
+		<div data-theme="a" data-role="header" data-position="fixed">
+			<h1>Scavenger Mobile v0.1</h1>
+			<div data-role="navbar" data-iconpos="top">
+				<ul>
+					<li><a href="#give" data-theme="" data-icon=""> Give </a></li>
+					<li><a href="#take" data-theme="" data-icon=""> Take </a></li>
+					<li><a href="#profile" data-theme="" data-icon=""
+						class="ui-btn-active ui-state-persist"> Profile </a></li>
+				</ul>
+			</div>
+		</div>
+		<div data-role="content">Profile</div>
+	</div>
 
-
-
-
-  <section role="region">
-    <!-- if your tabs are at the top, remove class="bottom" -->
-    <ul role="tablist" data-items="4" class="bottom">
-      <li id="give-tab" role="tab">
-        <a href="#give">Give</a>
-        <div role="tabpanel"></div>
-      </li>
-      <li id="take-tab" role="tab">
-        <a href="#take" >Take</a>
-        <div role="tabpanel"></div>
-      </li>
-      <li id="forum-tab" role="tab">
-        <a href="#forum">Discuss</a>
-        <div role="tabpanel"></div>
-      </li>
-      <li id="profile-tab" role="tab">
-        <a href="#profile" class="icon">Me</a>
-        <div role="tabpanel"></div>
-      </li>
-    </ul>
-  </section>
 
 </body>
 </html>
