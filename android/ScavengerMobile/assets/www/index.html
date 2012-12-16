@@ -258,13 +258,13 @@ var BASE_URL = "http://dev.scavenger.org.uk/api";
 Apply controllers to view 
 *********************/  
 $("#photo-get-new").click(function() {
-   navigator.camera.getPicture(takePhotoURI, onFail, { 
+   navigator.camera.getPicture(takePhotoURI, onPhotoFail, { 
       quality: 50,  targetWidth: 400, targetHeight: 400,  destinationType: destinationType.FILE_URI 
       }); //getpicture
 }); //click
 
 $("#photo-get-existing").click(function() {
-   navigator.camera.getPicture(takePhotoURI, onFail, {                                                                                                 
+   navigator.camera.getPicture(takePhotoURI, onPhotoFail, {                                                                                                 
       quality: 50, destinationType: destinationType.FILE_URI,  sourceType: pictureSource.PHOTOLIBRARY
     }); //get picture
 }); // click
@@ -347,14 +347,14 @@ function onDeviceReady() {
     try {
     FB.init({ appId: "168526436623358", nativeInterface: CDV.FB, useCachedDialogs: false });
     
-         console.log("===========FACEBOOK LOGIN");
-    FB.login(function(response) {
-        if (response.authResponse) {
-            console.log("signed in FB");
-        } else {
-            console.log("not signed in FB");
-        }
-    });
+        /*console.log("===========FACEBOOK LOGIN");
+        FB.login(function(response) {
+            if (response.authResponse) {
+                console.log("signed in FB");
+            } else {
+                console.log("not signed in FB");
+            }
+        }); */
     } catch (e) {
       console.log(e);
     }
@@ -452,6 +452,9 @@ function itemPutSuccess(r) {
     FB.api('/me', function(response) {
         console.log('Good to see you, ' + response.name + '.');
     });
+}
+function onPhotoFail(error){
+  console.log(error);
 }
 
   </script>
