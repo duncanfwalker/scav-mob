@@ -5,140 +5,112 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<script type="text/javascript" charset="utf-8"
-	src="libs/cordova-2.2.0.js"></script>
-<script type="text/javascript" charset="utf-8"
-	src="libs/jquery-1.8.3.min.js"></script>
-<script type="text/javascript" charset="utf-8"
-	src="libs/jquery.mobile-1.1.1.min.js"></script>
-<script type="text/javascript" charset="utf-8"
-	src="libs/cdv-plugin-fb-connect.js"></script>
-<script type="text/javascript" charset="utf-8"
-	src="libs/facebook_js_sdk.js"></script>
+<script type="text/javascript" charset="utf-8" src="libs/cordova-2.2.0.js"></script>
+<script type="text/javascript" charset="utf-8" src="libs/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="libs/jquery.mobile-1.2.0.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="libs/cdv-plugin-fb-connect.js"></script>
+<script type="text/javascript" charset="utf-8" src="libs/facebook_js_sdk.js"></script>
 
 
-<link rel="stylesheet" type="text/css"
-	href="css/jquery.mobile-1.1.1.min.css" />
+<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.2.0.min.css" />
 
 <style>
 .ui-navbar li .ui-btn-icon-top .ui-btn-inner {
 	padding-top: .7em;
 }
+.ui-header .ui-title, .ui-footer .ui-title {
+	margin : .6em 0px .8em;
+	text-align: left;
+}
+textarea.ui-input-text {
+height: auto;
+}
+
+.ui-dialog-contain {
+background-color: white;
+}
+#new-item-image {
+ 
+ }
+.image-placeholder {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+#new-item-image-preview  {
+            width: 29%;
+            float: left;
+            padding: 1%;
+            margin: 0 1%;
+            text-align: center;
+            }
+.new-item-image-controls {
+width: 66%;
+   float: left;
+}
+#image-editor {
+display: none;
+}
 </style>
 
-<script type="text/javascript" charset="utf-8">
-var pictureSource;   // picture source
-var destinationType; // sets the format of returned value 
-
-// Wait for Cordova to connect with the device
-//
-document.addEventListener("deviceready",onDeviceReady,false);
-
-// Cordova is ready to be used!
-function onDeviceReady() {
-    pictureSource=navigator.camera.PictureSourceType;
-    destinationType=navigator.camera.DestinationType;
-}
-
-// Called when a photo is successfully retrieved
-//
-function onPhotoDataSuccess(imageData) {
-// Uncomment to view the base64 encoded image data
-   console.log(imageData);
-// alert(imageData);
-
-  var smallImage = document.getElementById('smallImage');
-
-  smallImage.style.display = 'block';
-  $('#smallImage').attr("src","data:image/jpeg;base64," + imageData);
-}
-
-// Called when a photo is successfully retrieved
-//
-function onPhotoURISuccess(imageURI) {
-  // Uncomment to view the image file URI 
-  // console.log(imageURI);
-  
-  var largeImage = document.getElementById('largeImage');
-  largeImage.style.display = 'block';
-  
-  // Show the captured photo
-  // The inline CSS rules are used to resize the image
-  largeImage.src = imageURI;
-}
-
-function onFail(message) {
-  alert('Failed because: ' + message);
-}
-  
-/********************
-Apply behaviours to view 
-*********************/  
-$(document).ready(function() {
-   $("#photo-get-new").click(function() {
-       navigator.camera.getPicture(onPhotoDataSuccess, onFail, { 
-	   												   quality: 5,  
-      												   targetWidth: 100,
- 													   targetHeight: 100, 
-        											   destinationType: destinationType.DATA_URL 
-													   }); //getpicture
-   }); //click
-   $("#photo-get-existing").click(function() {
-	   navigator.camera.getPicture(onPhotoURISuccess, onFail, { 
-    											 	  quality: 50, 
-    												  destinationType: destinationType.FILE_URI,
-     											 	  sourceType: pictureSource.PHOTOLIBRARY
-	   });
-	});
-});
-    </script>
 </head>
 <body>
+     <div id="fb-root"></div>
+        <div id="log"></div>
 
-	<div id="login"></div>
+	<div id="data"></div>
 	<div data-role="page" id="give">
 		<div data-theme="a" data-role="header" data-position="fixed">
-			<h1>Scavenger Mobile v0.1</h1>
+			<h1>Scavenger Mobile <small>BETA 1</small></h1>
 			<div data-role="navbar" data-iconpos="top">
 				<ul>
-					<li><a href="#give" data-theme="" data-icon=""
+					<li><a href="#give" data-theme="" data-icon=""  data-transition="none"
 						class="ui-btn-active ui-state-persist"> Give </a></li>
-					<li><a href="#take" data-theme="" data-icon=""> Take </a></li>
-					<li><a href="#profile" data-theme="" data-icon=""> Profile
-					</a></li>
+					<li><a href="#take" data-theme="" data-icon=""  data-transition="none"> Take </a></li>
+	<!--				<li><a href="#profile" data-theme="" data-icon=""  data-transition="none"> Profile
+					</a></li>   -->
 				</ul>
 			</div>
 		</div>
 		<div data-role="content">
-			<a href="facebook.html" data-role="button">Facebook login</a>
+	<!--<a id="facebook-login" data-role="button">Facebook login dialog</a>
+				  <a href="#login" id="scavenger-login" data-rel="dialog" data-role="button">Mobile Login</a>  -->
 			<form action="">
-				<div data-role="fieldcontain">
-					<fieldset data-role="controlgroup" data-mini="true">
-						<img src="http://codiqa.com/static/images/v2/image.png"
-							alt="image" /> <img
-							style="display: none; width: 60px; height: 60px;" id="smallImage"
-							src="" /> <img id="item-thumbnail"
-							style="display: none; width: 60px; height: 60px;" id="smallImage"
-							src="" /> <a id="photo-get-new" data-role="button"
-							data-inline="true" data-transition="none" href="#page1"> New
-						</a> <a id="photo-get-existing" data-role="button" data-inline="true"
-							data-transition="none" href="#page1"> Existing </a>
-					</fieldset>
-				</div>
-				<div data-role="fieldcontain">
-					<fieldset data-role="controlgroup" data-mini="true">
-						<label for="textinput2"> </label> <input name="" id="textinput2"
+    					<fieldset data-role="controlgroup" data-mini="true">
+						<label for="title"> </label> <input name="title" id="title"
 							placeholder="Title" value="" type="text" />
 					</fieldset>
-				</div>
-				<div data-role="fieldcontain">
-					<fieldset data-role="controlgroup">
-						<label for="textarea1"> </label>
-						<textarea name="" id="textarea1" placeholder="Description"
-							data-rows="20">
-                            </textarea>
+					<fieldset id="new-item-image" class="ui-body-b"><!--data-type="horizontal" -->
+						<div id="new-item-image-preview"  >
+              <img style="padding: 20px 0;" class="image-placeholder" src="http://codiqa.com/static/images/v2/image.png" alt="image" />
+    
+              <img style="display: none; width: 95%; " id="smallImage"
+							src="" />
+              <div id="progress-bar" style="height: 10px; width:0; background-color: red;"></div> 
+            </div> 
+            <div id="image-chooser"  class="new-item-image-controls" data-role="controlgroup"  > 
+            <a id="photo-get-new" data-role="button"
+							 data-transition="none" href="#page1" data-theme="c">Capture
+						</a> 
+            <a id="photo-get-existing" data-role="button" 
+							data-transition="none" href="#page1" data-theme="c">Browse</a>
+            </div>
+            <div id="image-editor"  data-role="controlgroup" class="ui-body-c" data-type="horizontal" > 
+            <a id="photo-clear" data-role="button" data-icon="delete"
+							 data-transition="none" href="#page1" data-theme="c">Clear
+						</a> 
+            <a id="photo-rotate" data-role="button" data-icon="forward"
+							data-transition="none" href="#page1" data-theme="c">Rotate</a>
+            </div>
 					</fieldset>
-				</div>
+
+
+
+	        				<fieldset data-role="controlgroup"  data-mini="false">
+						<label for="description"> </label>
+						<textarea name="description" id="description" placeholder="Description"
+							data-rows="20" row="20" ></textarea>
+					</fieldset>
+
 				<div data-role="collapsible-set">
 					<div data-role="collapsible" data-collapsed="true">
 						<h3>Advanced Options</h3>
@@ -157,44 +129,331 @@ $(document).ready(function() {
 						</div>
 					</div>
 				</div>
-				<input type="submit" data-theme="b" data-icon="arrow-r"
+				<input  id="offer-item" type="submit" data-theme="b" data-icon="arrow-r"
 					data-iconpos="right" value="Offer this now" />
 			</form>
 		</div>
 	</div>
 
-
 	<div data-role="page" id="take">
 		<div data-theme="a" data-role="header" data-position="fixed">
-			<h1>Scavenger Mobile v0.1</h1>
+			<h1>Scavenger Mobile <small>BETA 1</small></h1>
 			<div data-role="navbar" data-iconpos="top">
 				<ul>
-					<li><a href="#give" data-theme="" data-icon=""> Give </a></li>
-					<li><a href="#take" data-theme="" data-icon=""
+					<li><a href="#give" data-theme="" data-icon=""  data-transition="none"> Give </a></li>
+					<li><a href="#take" data-theme="" data-icon=""  data-transition="none"
 						class="ui-btn-active ui-state-persist"> Take </a></li>
-					<li><a href="#profile" data-theme="" data-icon=""> Profile
-					</a></li>
+	<!--				<li><a href="#profile" data-theme="" data-icon=""  data-transition="none"> Profile
+					</a></li>   -->
 				</ul>
 			</div>
 		</div>
-		<div data-role="content">Take</div>
+		<div data-role="content">
+		
+		
+		<div id="search-results">
+    
+    <ul id="results-list" data-role="listview">     <li></li>
+    </ul>
+ </div>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		</div>
 	</div>
 
 	<div data-role="page" id="profile">
 		<div data-theme="a" data-role="header" data-position="fixed">
-			<h1>Scavenger Mobile v0.1</h1>
+			<h1>Scavenger Mobile <small>BETA 1</small></h1>
 			<div data-role="navbar" data-iconpos="top">
 				<ul>
-					<li><a href="#give" data-theme="" data-icon=""> Give </a></li>
-					<li><a href="#take" data-theme="" data-icon=""> Take </a></li>
-					<li><a href="#profile" data-theme="" data-icon=""
-						class="ui-btn-active ui-state-persist"> Profile </a></li>
+					<li><a href="#give" data-theme="" data-icon=""  data-transition="none"> Give </a></li>
+					<li><a href="#take" data-theme="" data-icon=""  data-transition="none"> Take </a></li>
+		<!--			<li><a href="#profile" data-theme="" data-icon=""  data-transition="none"
+						class="ui-btn-active ui-state-persist"> Profile </a></li> -->
 				</ul>
 			</div>
 		</div>
-		<div data-role="content">Profile</div>
+		<div data-role="content">Administer your account</div>
 	</div>
+	
+	
+	
+<div data-role="page" id="login">
+
+<p>Please login with your email/username and password below.</p>
+	
+<div id="infoMessage"></div>
+
+<form id="login-form"  method="post" accept-charset="utf-8">  
+  	
+  <p>
+    <label for="identity">Email/Username:</label><input type="text" name="1identity" value="" id="1identity">
+  </p>
+
+  <p>
+    <label for="password">Password:</label><input type="password" name="1password" value="" id="1password">
+  </p>
+
+  <p>
+    <label for="remember">Remember Me:</label>
+  </p>
+    <a href="#" data-role="button" id="login-submit">Submit</a>
+     
+ <!--   <p><input type="submit" id="submit" name="submit" value="Login"></p>-->
+  
+  <div id="log"></div>
+    
+</form>
 
 
+</div>
+<script>
+// Wait for Cordova to connect with the device
+document.addEventListener("deviceready",onDeviceReady,false);
+
+$( document ).bind( "mobileinit", function() {
+    // jQuery Mobile configuration changes 
+    $.mobile.allowCrossDomainPages = true;
+});
+
+if ((typeof cordova == 'undefined') && (typeof Cordova == 'undefined')) alert('Cordova variable does not exist. Check that you have included cordova.js correctly');
+if (typeof CDV == 'undefined') alert('CDV variable does not exist. Check that you have included cdv-plugin-fb-connect.js correctly');
+if (typeof FB == 'undefined') alert('FB variable does not exist. Check that you have included the Facebook JS SDK file.');
+       
+FB.Event.subscribe('auth.login', function(response) {
+                   alert('auth.login event');
+                   });
+
+FB.Event.subscribe('auth.logout', function(response) {
+                   alert('auth.logout event');
+                   });
+         /*
+FB.Event.subscribe('auth.sessionChange', function(response) {
+                   alert('auth.sessionChange event');
+                   });
+
+FB.Event.subscribe('auth.statusChange', function(response) {
+                   alert('auth.statusChange event');
+                   }); */
+    
+var friendIDs = [];
+var fdata;
+var pictureSource;   // picture source
+var destinationType; // sets the format of returned value 
+var destinationImageURI;
+var access_token = "1274brad1274brad1274brad1274brad";
+var BASE_URL = "http://dev.scavenger.org.uk/api";
+
+
+
+/********************
+Apply controllers to view 
+*********************/  
+$("#photo-get-new").click(function() {
+   navigator.camera.getPicture(takePhotoURI, onFail, { 
+      quality: 50,  targetWidth: 400, targetHeight: 400,  destinationType: destinationType.FILE_URI 
+      }); //getpicture
+}); //click
+
+$("#photo-get-existing").click(function() {
+   navigator.camera.getPicture(takePhotoURI, onFail, {                                                                                                 
+      quality: 50, destinationType: destinationType.FILE_URI,  sourceType: pictureSource.PHOTOLIBRARY
+    }); //get picture
+}); // click
+
+$("#facebook-login").click(function() {
+   FB.login(
+     function(response) {
+       if (response.session) {
+       alert('logged in');
+       } else {
+       alert('not logged in');
+       }
+     },
+     { scope: "email" }
+     );
+}); // click
+
+$("#offer-item").click(function() {
+testAPI();
+	/*	  console.log('Debug 1');
+			var params = {
+			    method: 'feed',
+			    name: $('#title').val(),
+			    link: 'https://www.google.com/',
+			    picture: 'http://fbrell.com/f8.jpg',
+			    caption: $('#title').val(),
+			    description: $('#description').val()
+			  };
+			console.log(params);
+		    FB.ui(params, function(obj) { console.log(obj);});     */
+        var params = {
+       // 	method: 'feed',
+          method: 'stream.publish',
+			    name: $('#title').val(),
+          message :  $('#title').val(),
+			    link: destinationImageURI,
+			    picture: destinationImageURI,
+			    caption: $('#title').val(),
+			    description: "I'm giving something away "
+			  };
+     //    FB.ui( params, function(response) {
+       FB.api('me/feed', 'post', params, function(response) {
+          if (!response || response.error) {
+            alert('Sorry, there was a problem posting to Facebook. Check you are logged in.');
+            console.log("==========FACEBOOK=============");
+            console.log(JSON.stringify(params));
+            console.log(JSON.stringify(response));
+          } else {
+            alert('Post ID: ' + response.id);
+          }
+        });		    
+}); // click
+
+$('#login-submit').click(function(event) {
+   $.post("http://sm.understanding-geek.com/index.php/auth", { identity: "duncfw@gmail.com", password: "password" },
+   function(data) {
+     alert("Data Loaded: " + data);
+     $('#login').dialog('close');
+   });
+}); // click
+
+$('#take').live('pageshow', function (event, ui) {
+  $.mobile.loading('show',{
+  	text: 'Loading...',
+  	textVisible: true,
+  	theme: 'b',
+  });
+  $.ajaxSetup({ cache: false });
+	$.getJSON(encodeURI(BASE_URL+"/item/item_list"+ '?' + Math.round(new Date().getTime())), renderItems);
+     
+}); // show
+
+
+
+
+function onDeviceReady() {
+    pictureSource=navigator.camera.PictureSourceType;
+    destinationType=navigator.camera.DestinationType;
+
+    try {
+    FB.init({ appId: "168526436623358", nativeInterface: CDV.FB, useCachedDialogs: false });
+    
+         console.log("===========FACEBOOK LOGIN");
+    FB.login(function(response) {
+        if (response.authResponse) {
+            console.log("signed in FB");
+        } else {
+            console.log("not signed in FB");
+        }
+    });
+    } catch (e) {
+      console.log(e);
+    }
+                                      
+}
+
+
+
+/********************
+Apply controllers to view 
+*********************/ 
+// Called when a photo is successfully retrieved
+function takePhotoURI(imageURI) {
+  // Uncomment to view the image file URI 
+   console.log(imageURI);
+  
+  var smallImage = document.getElementById('smallImage');
+
+  smallImage.style.display = 'block';
+  $('.image-placeholder').hide();
+  $('#image-chooser').hide();
+  $('#image-editor').show();
+  $('#new-item-image-preview').width('100%');
+  $('#smallImage').attr("src",imageURI);
+  
+
+  $.post("http://sm.understanding-geek.com/index.php/auth", { identity: "duncfw@gmail.com", password: "password" }, win, fail);
+
+  var options = new FileUploadOptions();
+  options.fileKey="file";
+  options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1)+".jpg";
+  options.mimeType="image/jpeg";
+
+  var params = {
+      "title" : $('#title').val(),
+      "user_id" : "duncfw@gmail.com",
+      "access_token" : access_token 
+      }; 
+
+  options.params = params;
+
+  var ft = new FileTransfer();
+  ft.onprogress = function(progressEvent) {
+      if (progressEvent.lengthComputable) {
+        $("#progress-bar").width ( Math.floor(progressEvent.loaded / progressEvent.total) + "%");
+        
+        console.log("WIDTH:" + (progressEvent.loaded / progressEvent.total) + "%");
+      }
+  };
+  ft.upload(imageURI, encodeURI(BASE_URL+"/item/item_put"), itemPutSuccess, itemPutFail, options);
+  
+}
+
+function renderItems(items) {
+        $('#results-list').html('');
+
+       $.each(items, function(index) {
+          $('#results-list').append($('<li>')
+                            .append('<img src="'+items[index].datafile.substring(0, items[index].datafile.length - 4)+'_thumb.jpg" />')
+                            .append($('<a>'+items[index].keywords+ '</a>')
+                              .attr({ 'href' : items[index].datafile , 'data-rel' : "dialog"     }   )
+                              )                 
+          );
+         // $('#results-list').append('<br />');
+        });
+        $('#results-list').listview('refresh');
+        console.log($('#results-list').html());
+        $.mobile.loading('hide');
+}
+
+function itemPutSuccess(r) {
+  console.log("Code = " + r.responseCode);
+  console.log("Response = " + r.response);
+  console.log("Sent = " + r.bytesSent);
+  
+  var data, dataReceived = false;
+  
+  $.getJSON(r.response,function(json){
+    data = json.tst;
+    dataReceived = true;
+    console.log(data);         
+  });
+  destinationImageURI =  BASE_URL + data.upload_date.image_url;
+  console.log(destinationImageURI);  
+}
+
+ function itemPutFail(error) {
+     alert("An error has occurred: Code = " + error.code);
+     console.log("upload error source " + error.source);
+     console.log("upload error target " + error.target);
+ }
+ 
+ function testAPI() {
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', function(response) {
+        console.log('Good to see you, ' + response.name + '.');
+    });
+}
+
+  </script>
 </body>
 </html>

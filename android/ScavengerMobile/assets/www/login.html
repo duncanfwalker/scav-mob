@@ -4,29 +4,78 @@
 	<head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1"> 
-	<title>jQuery Mobile Framework - Dialog Example</title> 
-	<link rel="stylesheet"  href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css" />  
-	<link rel="stylesheet" href="../_assets/css/jqm-docs.css"/>
-	<script type="text/javascript" src="http://code.jquery.com/jquery-1.5.min.js"></script>
-	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script>
+	<title>Mobile login</title> 
+<script type="text/javascript" charset="utf-8"
+	src="libs/jquery-1.8.3.min.js"></script>
 </head> 
 <body> 
 
 <div data-role="page">
 	
 		<div data-role="header" data-theme="d" data-position="inline">
-			<h1>Dialog</h1>
+			<h1>Login</h1>
+	
 
 		</div>
 
 		<div data-role="content" data-theme="c">
-			<h1>Delete page?</h1>
-			<p>This is a regular page, styled as a dialog. To create a dialog, just link to a normal page and include a transition and <code>data-rel="dialog"</code> attribute.</p>
-			<a href="docs-dialogs.html" data-role="button" data-rel="back" data-theme="b">Sounds good</a>       
-			<a href="docs-dialogs.html" data-role="button" data-rel="back" data-theme="c">Cancel</a>    
+
+
+
+<p>Please login with your email/username and password below.</p>
+	
+<div id="infoMessage"></div>
+
+<form id="login-form"  method="post" accept-charset="utf-8">  
+  	
+  <p>
+    <label for="identity">Email/Username:</label><input type="text" name="1identity" value="" id="1identity">
+  </p>
+
+  <p>
+    <label for="password">Password:</label><input type="password" name="1password" value="" id="1password">
+  </p>
+
+  <p>
+    <label for="remember">Remember Me:</label>
+  </p>
+    <a href="#" data-role="button" id="submit">Submit</a>
+     
+ <!--   <p><input type="submit" id="submit" name="submit" value="Login"></p>-->
+  
+  <div id="log"></div>
+    
+</form>
+
+
+
+
 		</div>
 	</div>
 
+<script>
+$(document).ready(function() {
+	$('#submit').click(function(event) {
+	  event.preventDefault();
+	  alert("tst");
+	  	  var form = $('#login-form');
+	  var formData = new FormData(form);
+	formData.append('identity', 'duncfw@gmail.com');
+	  formData.append('password', 'password');
+	  alert("pre req");
+	  var xhr = new XMLHttpRequest(); 
+	  xhr.open('POST', 'http://sm.understanding-geek.com/index.php/auth', true);
+	  alert("post req");
+	//  xhr.open('POST', form.attr('action'), true);
+	  xhr.onload = function(e) { 
+	  $("#log").html(xhr.responseText);  
+	  };
+	
+	    xhr.send(formData);  // multipart/form-data
+	    alert("pre send");
 
+	});
+});
+</script>
 </body>
 </html>
