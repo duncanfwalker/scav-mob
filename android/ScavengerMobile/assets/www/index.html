@@ -10,47 +10,12 @@
 <script type="text/javascript" charset="utf-8" src="libs/jquery.mobile-1.2.0.min.js"></script>
 <script type="text/javascript" charset="utf-8" src="libs/cdv-plugin-fb-connect.js"></script>
 <script type="text/javascript" charset="utf-8" src="libs/facebook_js_sdk.js"></script>
-
+<script type="text/javascript" charset="utf-8" src="js/scav-connect.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/item.js"></script>
 
 <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.2.0.min.css" />
+<link rel="stylesheet" type="text/css" href="css/scavenger.css" />
 
-<style>
-.ui-navbar li .ui-btn-icon-top .ui-btn-inner {
-	padding-top: .7em;
-}
-.ui-header .ui-title, .ui-footer .ui-title {
-	margin : .6em 0px .8em;
-	text-align: left;
-}
-textarea.ui-input-text {
-height: auto;
-}
-
-.ui-dialog-contain {
-background-color: white;
-}
-#new-item-image {
- 
- }
-.image-placeholder {
-    font-size: 1.2em;
-    font-weight: bold;
-}
-#new-item-image-preview  {
-            width: 29%;
-            float: left;
-            padding: 1%;
-            margin: 0 1%;
-            text-align: center;
-            }
-.new-item-image-controls {
-width: 66%;
-   float: left;
-}
-#image-editor {
-display: none;
-}
-</style>
 
 </head>
 <body>
@@ -74,11 +39,7 @@ display: none;
 		<div data-role="content">
 	<!--<a id="facebook-login" data-role="button">Facebook login dialog</a>
 				  <a href="#login" id="scavenger-login" data-rel="dialog" data-role="button">Mobile Login</a>  -->
-			<form action="">
-    					<fieldset data-role="controlgroup" data-mini="true">
-						<label for="title"> </label> <input name="title" id="title"
-							placeholder="Title" value="" type="text" />
-					</fieldset>
+			<form id="give-item" action="">
 					<fieldset id="new-item-image" class="ui-body-b"><!--data-type="horizontal" -->
 						<div id="new-item-image-preview"  >
               <img style="padding: 20px 0;" class="image-placeholder" src="http://codiqa.com/static/images/v2/image.png" alt="image" />
@@ -103,17 +64,20 @@ display: none;
             </div>
 					</fieldset>
 
-
+            					<fieldset data-role="controlgroup" data-mini="true">
+						<label for="title"> </label> <input name="title" id="title"
+							placeholder="Title" value="" type="text" />
+					</fieldset>
 
 	        				<fieldset data-role="controlgroup"  data-mini="false">
 						<label for="description"> </label>
 						<textarea name="description" id="description" placeholder="Description"
 							data-rows="20" row="20" ></textarea>
 					</fieldset>
-
+  <!--	
 				<div data-role="collapsible-set">
 					<div data-role="collapsible" data-collapsed="true">
-						<h3>Advanced Options</h3>
+					<h3>Advanced Options</h3>
 						<div data-role="fieldcontain">
 							<label for="selectmenu1"> </label> <select name=""
 								data-mini="true">
@@ -128,7 +92,9 @@ display: none;
 							</fieldset>
 						</div>
 					</div>
-				</div>
+				</div> -->
+
+        
 				<input  id="offer-item" type="submit" data-theme="b" data-icon="arrow-r"
 					data-iconpos="right" value="Offer this now" />
 			</form>
@@ -216,6 +182,17 @@ display: none;
 
 </div>
 <script>
+
+var new_item = new Item();
+
+
+
+
+
+
+
+
+
 // Wait for Cordova to connect with the device
 document.addEventListener("deviceready",onDeviceReady,false);
 
@@ -251,23 +228,42 @@ var destinationType; // sets the format of returned value
 var destinationImageURI;
 var access_token = "1274brad1274brad1274brad1274brad";
 var BASE_URL = "http://dev.scavenger.org.uk/api";
+var item_id;
 
 
 
 /********************
 Apply controllers to view 
 *********************/  
-$("#photo-get-new").click(function() {
-   navigator.camera.getPicture(takePhotoURI, onPhotoFail, { 
+$("#photo-get-new").click(function(event) {
+   navigator.camera.getPicture(function (imageURI) { 
+          new_item.image_uri =  imageURI;
+          showThumb(imageURI);
+          new_item.sync($(event.target));
+          }, function () {}, { 
       quality: 50,  targetWidth: 400, targetHeight: 400,  destinationType: destinationType.FILE_URI 
       }); //getpicture
 }); //click
 
-$("#photo-get-existing").click(function() {
-   navigator.camera.getPicture(takePhotoURI, onPhotoFail, {                                                                                                 
+$("#photo-get-existing").click(function(event) {
+   navigator.camera.getPicture(function (imageURI) { 
+          new_item.image_uri =  imageURI;
+          showThumb(imageURI);
+          new_item.sync($(event.target));
+          }, function () {}, {                                                                                                 
       quality: 50, destinationType: destinationType.FILE_URI,  sourceType: pictureSource.PHOTOLIBRARY
     }); //get picture
 }); // click
+$('#give-item input, #give-item textarea').change(function(event) {
+  var update_params = [];
+//  update_params.push(event.target.id);
+  new_item.sync($(event.target));
+  
+
+});
+
+
+
 
 $("#facebook-login").click(function() {
    FB.login(
@@ -282,49 +278,32 @@ $("#facebook-login").click(function() {
      );
 }); // click
 
-$("#offer-item").click(function() {
-testAPI();
-	/*	  console.log('Debug 1');
-			var params = {
-			    method: 'feed',
-			    name: $('#title').val(),
-			    link: 'https://www.google.com/',
-			    picture: 'http://fbrell.com/f8.jpg',
-			    caption: $('#title').val(),
-			    description: $('#description').val()
-			  };
-			console.log(params);
-		    FB.ui(params, function(obj) { console.log(obj);});     */
-        var params = {
-       // 	method: 'feed',
-          method: 'stream.publish',
-			    name: $('#title').val(),
-          message :  $('#title').val(),
-			    link: destinationImageURI,
-			    picture: destinationImageURI,
-			    caption: $('#title').val(),
-			    description: "I'm giving something away "
-			  };
-     //    FB.ui( params, function(response) {
-       FB.api('me/feed', 'post', params, function(response) {
-          if (!response || response.error) {
-            alert('Sorry, there was a problem posting to Facebook. Check you are logged in.');
-            console.log("==========FACEBOOK=============");
-            console.log(JSON.stringify(params));
-            console.log(JSON.stringify(response));
-          } else {
-            alert('Post ID: ' + response.id);
-          }
-        });		    
+$("#offer-item").click(function(event) {
+    event.preventDefault();
+    new_item.publish();
+    alert("Thanks for offering!");
+     clearThumb();
+    $('#give-item"').reset();
+   // $.mobile.changePage($('#give'));
+    new_item = new Item();  
 }); // click
 
+$('#photo-clear').click(function(event) {
+  clearThumb();
+}); // click
 $('#login-submit').click(function(event) {
-   $.post("http://sm.understanding-geek.com/index.php/auth", { identity: "duncfw@gmail.com", password: "password" },
+   $.post(BASE_URL+"/auth", { identity: "duncfw@gmail.com", password: "password" },
    function(data) {
      alert("Data Loaded: " + data);
      $('#login').dialog('close');
    });
 }); // click
+
+
+
+
+
+
 
 $('#take').live('pageshow', function (event, ui) {
   $.mobile.loading('show',{
@@ -337,6 +316,16 @@ $('#take').live('pageshow', function (event, ui) {
      
 }); // show
 
+
+
+
+function newItem() {
+  $.post(  BASE_URL+"/item/item_update", 
+  			   update_params,
+		       function(data) { console.log("updated ok"); } ,
+		       function(data) { console.log("failed to update"); } 
+  );  
+}
 
 
 
@@ -361,7 +350,25 @@ function onDeviceReady() {
                                       
 }
 
+function clearThumb() {
 
+  $('#smallImage').css("display","none");
+  $('.image-placeholder').show();
+  $('#image-chooser').show();
+  $('#image-editor').hide();
+  $('#new-item-image-preview').width('29%');
+  $('#smallImage').attr("src","");
+}
+
+function showThumb(imageURI) {
+  $('#smallImage').css("display","block");
+  $('.image-placeholder').hide();
+  $('#image-chooser').hide();
+  $('#image-editor').show();
+  $('#new-item-image-preview').width('100%');
+  $('#smallImage').attr("src",imageURI);
+
+}
 
 /********************
 Apply controllers to view 
@@ -370,18 +377,12 @@ Apply controllers to view
 function takePhotoURI(imageURI) {
   // Uncomment to view the image file URI 
    console.log(imageURI);
-  
-  var smallImage = document.getElementById('smallImage');
+     
 
-  smallImage.style.display = 'block';
-  $('.image-placeholder').hide();
-  $('#image-chooser').hide();
-  $('#image-editor').show();
-  $('#new-item-image-preview').width('100%');
-  $('#smallImage').attr("src",imageURI);
-  
-
-  $.post("http://sm.understanding-geek.com/index.php/auth", { identity: "duncfw@gmail.com", password: "password" }, win, fail);
+  $.post(   BASE_URL+"/auth", 
+  			{ identity: "duncfw@gmail.com", password: "password" },
+			function(data) { alert("Auth success"); } ,
+			function(data) { alert("Auth fail"); } );
 
   var options = new FileUploadOptions();
   options.fileKey="file";
@@ -421,9 +422,20 @@ function renderItems(items) {
          // $('#results-list').append('<br />');
         });
         $('#results-list').listview('refresh');
+    /*    $('#results-list a').click(function () {
+          $.mobile.loading('show',{
+          	text: 'Loading item...',
+          	textVisible: true,
+          	theme: 'b',
+          });
+        });    */
+        
+
         console.log($('#results-list').html());
         $.mobile.loading('hide');
 }
+
+
 
 function itemPutSuccess(r) {
   console.log("Code = " + r.responseCode);
