@@ -3,15 +3,20 @@
 <head>
 <title>Scavenger Mobile</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1; user-scalable=0;" />
 
 <script type="text/javascript" charset="utf-8" src="libs/cordova-2.2.0.js"></script>
-<script type="text/javascript" charset="utf-8" src="libs/jquery-1.8.3.min.js"></script>
-<script type="text/javascript" charset="utf-8" src="libs/jquery.mobile-1.2.0.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="libs/jquery-1.8.3.js"></script>
+<script type="text/javascript" charset="utf-8" src="libs/jquery.mobile-1.2.0.js"></script>
 <script type="text/javascript" charset="utf-8" src="libs/cdv-plugin-fb-connect.js"></script>
 <script type="text/javascript" charset="utf-8" src="libs/facebook_js_sdk.js"></script>
+<script type="text/javascript" charset="utf-8" src="libs/hogan-2.0.0.js"></script>
+
 <script type="text/javascript" charset="utf-8" src="js/scav-connect.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/item.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/SettingsList.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/StartupView.js"></script>
+
 
 <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.2.0.min.css" />
 <link rel="stylesheet" type="text/css" href="css/scavenger.css" />
@@ -19,62 +24,61 @@
 
 </head>
 <body>
-     <div id="fb-root"></div>
-        <div id="log"></div>
+	<div id="action-bar" data-id="action" data-theme="a" data-role="header"
+		data-position="fixed" role="header">
+		<h1 id="title"></h1>
+		<a href="#give" class="give-button">G</a> <!--  <a href="#take">S</a>--> <a href="#me">&lt;</a>
+
+	</div>
+
+
+	<div id="fb-root"></div>
+	<div id="log"></div>
 
 	<div id="data"></div>
-	<div data-role="page" id="give">
-		<div data-theme="a" data-role="header" data-position="fixed">
-			<h1>Scavenger Mobile <small>BETA 1</small></h1>
-			<div data-role="navbar" data-iconpos="top">
-				<ul>
-					<li><a href="#give" data-theme="" data-icon=""  data-transition="none"
-						class="ui-btn-active ui-state-persist"> Give </a></li>
-					<li><a href="#take" data-theme="" data-icon=""  data-transition="none"> Take </a></li>
-	<!--				<li><a href="#profile" data-theme="" data-icon=""  data-transition="none"> Profile
-					</a></li>   -->
-				</ul>
-			</div>
-		</div>
+	<div title="Give" data-role="page" id="give">
+
 		<div data-role="content">
-	<!--<a id="facebook-login" data-role="button">Facebook login dialog</a>
+			<!--<a id="facebook-login" data-role="button">Facebook login dialog</a>
 				  <a href="#login" id="scavenger-login" data-rel="dialog" data-role="button">Mobile Login</a>  -->
 			<form id="give-item" action="">
-					<fieldset id="new-item-image" class="ui-body-b"><!--data-type="horizontal" -->
-						<div id="new-item-image-preview"  >
-              <img style="padding: 20px 0;" class="image-placeholder" src="http://codiqa.com/static/images/v2/image.png" alt="image" />
-    
-              <img style="display: none; width: 95%; " id="smallImage"
-							src="" />
-              <div id="progress-bar" style="height: 10px; width:0; background-color: red;"></div> 
-            </div> 
-            <div id="image-chooser"  class="new-item-image-controls" data-role="controlgroup"  > 
-            <a id="photo-get-new" data-role="button"
-							 data-transition="none" href="#page1" data-theme="c">Capture
-						</a> 
-            <a id="photo-get-existing" data-role="button" 
-							data-transition="none" href="#page1" data-theme="c">Browse</a>
-            </div>
-            <div id="image-editor"  data-role="controlgroup" class="ui-body-c" data-type="horizontal" > 
-            <a id="photo-clear" data-role="button" data-icon="delete"
-							 data-transition="none" href="#page1" data-theme="c">Clear
-						</a> 
-            <a id="photo-rotate" data-role="button" data-icon="forward"
+				<fieldset id="new-item-image" class="ui-body-b">
+					<!--data-type="horizontal" -->
+					<div id="new-item-image-preview">
+						<img style="padding: 20px 0;" class="image-placeholder"
+							src="http://codiqa.com/static/images/v2/image.png" alt="image" />
+
+						<img style="display: none; width: 95%;" id="smallImage" src="" />
+						<div id="progress-bar"
+							style="height: 10px; width: 0; background-color: red;"></div>
+					</div>
+					<div id="image-chooser" class="new-item-image-controls"
+						data-role="controlgroup">
+						<a id="photo-get-new" data-role="button" data-transition="none"
+							href="#page1" data-theme="c">Capture </a> <a
+							id="photo-get-existing" data-role="button" data-transition="none"
+							href="#page1" data-theme="c">Browse</a>
+					</div>
+					<div id="image-editor" data-role="controlgroup" class="ui-body-c"
+						data-type="horizontal">
+						<a id="photo-clear" data-role="button" data-icon="delete"
+							data-transition="none" href="#page1" data-theme="c">Clear </a> <a
+							id="photo-rotate" data-role="button" data-icon="forward"
 							data-transition="none" href="#page1" data-theme="c">Rotate</a>
-            </div>
-					</fieldset>
+					</div>
+				</fieldset>
 
-            					<fieldset data-role="controlgroup" data-mini="true">
-						<label for="title"> </label> <input name="title" id="title"
-							placeholder="Title" value="" type="text" />
-					</fieldset>
+				<fieldset data-role="controlgroup" data-mini="true">
+					<label for="title"> </label> <input name="title" id="title"
+						placeholder="Title" value="" type="text" />
+				</fieldset>
 
-	        				<fieldset data-role="controlgroup"  data-mini="false">
-						<label for="description"> </label>
-						<textarea name="description" id="description" placeholder="Description"
-							data-rows="20" row="20" ></textarea>
-					</fieldset>
-  <!--	
+				<fieldset data-role="controlgroup" data-mini="false">
+					<label for="description"> </label>
+					<textarea name="description" id="description"
+						placeholder="Description" data-rows="20" row="20"></textarea>
+				</fieldset>
+				<!--	
 				<div data-role="collapsible-set">
 					<div data-role="collapsible" data-collapsed="true">
 					<h3>Advanced Options</h3>
@@ -94,100 +98,85 @@
 					</div>
 				</div> -->
 
-        
-				<input  id="offer-item" type="submit" data-theme="b" data-icon="arrow-r"
-					data-iconpos="right" value="Offer this now" />
+
+				<input id="offer-item" type="submit" data-theme="b"
+					data-icon="arrow-r" data-iconpos="right" value="Offer this now" />
 			</form>
 		</div>
 	</div>
 
-	<div data-role="page" id="take">
-		<div data-theme="a" data-role="header" data-position="fixed">
-			<h1>Scavenger Mobile <small>BETA 1</small></h1>
-			<div data-role="navbar" data-iconpos="top">
-				<ul>
-					<li><a href="#give" data-theme="" data-icon=""  data-transition="none"> Give </a></li>
-					<li><a href="#take" data-theme="" data-icon=""  data-transition="none"
-						class="ui-btn-active ui-state-persist"> Take </a></li>
-	<!--				<li><a href="#profile" data-theme="" data-icon=""  data-transition="none"> Profile
-					</a></li>   -->
-				</ul>
-			</div>
-		</div>
+	<div title="Take" data-role="page" id="take">
+	
 		<div data-role="content">
-		
-		
-		<div id="search-results">
-    
-    <ul id="results-list" data-role="listview">     <li></li>
-    </ul>
- </div>
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		</div>
-	</div>
-
-	<div data-role="page" id="profile">
-		<div data-theme="a" data-role="header" data-position="fixed">
-			<h1>Scavenger Mobile <small>BETA 1</small></h1>
-			<div data-role="navbar" data-iconpos="top">
-				<ul>
-					<li><a href="#give" data-theme="" data-icon=""  data-transition="none"> Give </a></li>
-					<li><a href="#take" data-theme="" data-icon=""  data-transition="none"> Take </a></li>
-		<!--			<li><a href="#profile" data-theme="" data-icon=""  data-transition="none"
-						class="ui-btn-active ui-state-persist"> Profile </a></li> -->
+			<div id="search-results">
+				<ul class="offer-list" data-role="listview">
+					<li></li>
 				</ul>
 			</div>
+			</div>
+	</div>
+
+	<div title="Me" data-role="page" id="me">
+	
+			<div data-role="content">
+			<div id="search-results">
+				<ul class="offer-list" data-role="listview">
+					<li></li>
+				</ul>
+			</div>
+			</div>
+	
+	
+	</div>
+
+
+
+	<div title="Login" id="login" data-role="page">
+		<div data-role="header" data-theme="d">
+			<h1>Login</h1>
 		</div>
-		<div data-role="content">Administer your account</div>
+		<div id="infoMessage"></div>
+		<form id="login-form" method="post" accept-charset="utf-8">
+		<!--  	<p><label for="identity">Email/Username:</label><input type="text"	name="identity" value="" id="identity"></p>
+			<p><label for="password">Password:</label><input type="password"name="password" value="" id="password"></p>
+	-->
+		
+		
+			<div id="log"></div>
+		</form>
 	</div>
 	
 	
 	
-<div data-role="page" id="login">
-
-<p>Please login with your email/username and password below.</p>
-	
-<div id="infoMessage"></div>
-
-<form id="login-form"  method="post" accept-charset="utf-8">  
-  	
-  <p>
-    <label for="identity">Email/Username:</label><input type="text" name="1identity" value="" id="1identity">
-  </p>
-
-  <p>
-    <label for="password">Password:</label><input type="password" name="1password" value="" id="1password">
-  </p>
-
-  <p>
-    <label for="remember">Remember Me:</label>
-  </p>
-    <a href="#" data-role="button" id="login-submit">Submit</a>
-     
- <!--   <p><input type="submit" id="submit" name="submit" value="Login"></p>-->
-  
-  <div id="log"></div>
-    
-</form>
+<div id="templates">	
 
 
+	<script id="template-setting" type="text/x-hogan-template">
+{{#fields}}
+	<p><label for="{{id}}">{{label}}</label>
+	<{{tag}} type="{{type}}"	name="{{id}}" value="" id="{{id}}" data-role="{{role}}"> 
+	  {{#options}}<option value="{{value}}">{{option}}</option>{{/options}}
+	</{{tag}}></p>
+{{/fields}}
+	</script>		
 </div>
-<script>
+	
+	
+	
+	
+	
+	
+	<script>
 
 var new_item = new Item();
 
 
 
-
+$( document ).on( "mobileinit", function() {
+    // Make your jQuery Mobile framework configuration changes here!
+	$.support.cors = true;
+    $.mobile.allowCrossDomainPages = true;
+});
 
 
 
@@ -196,30 +185,9 @@ var new_item = new Item();
 // Wait for Cordova to connect with the device
 document.addEventListener("deviceready",onDeviceReady,false);
 
-$( document ).bind( "mobileinit", function() {
-    // jQuery Mobile configuration changes 
-    $.mobile.allowCrossDomainPages = true;
-});
 
-if ((typeof cordova == 'undefined') && (typeof Cordova == 'undefined')) alert('Cordova variable does not exist. Check that you have included cordova.js correctly');
-if (typeof CDV == 'undefined') alert('CDV variable does not exist. Check that you have included cdv-plugin-fb-connect.js correctly');
-if (typeof FB == 'undefined') alert('FB variable does not exist. Check that you have included the Facebook JS SDK file.');
-       
-FB.Event.subscribe('auth.login', function(response) {
-                   alert('auth.login event');
-                   });
 
-FB.Event.subscribe('auth.logout', function(response) {
-                   alert('auth.logout event');
-                   });
-         /*
-FB.Event.subscribe('auth.sessionChange', function(response) {
-                   alert('auth.sessionChange event');
-                   });
 
-FB.Event.subscribe('auth.statusChange', function(response) {
-                   alert('auth.statusChange event');
-                   }); */
     
 var friendIDs = [];
 var fdata;
@@ -232,12 +200,14 @@ var item_id;
 
 
 
+
+
 /********************
 Apply controllers to view 
 *********************/  
 $("#photo-get-new").click(function(event) {
    navigator.camera.getPicture(function (imageURI) { 
-          new_item.image_uri =  imageURI;
+          new_item.image_local_uri  =  imageURI;
           showThumb(imageURI);
           new_item.sync($(event.target));
           }, function () {}, { 
@@ -247,16 +217,21 @@ $("#photo-get-new").click(function(event) {
 
 $("#photo-get-existing").click(function(event) {
    navigator.camera.getPicture(function (imageURI) { 
-          new_item.image_uri =  imageURI;
+          new_item.image_local_uri =  imageURI;
           showThumb(imageURI);
           new_item.sync($(event.target));
           }, function () {}, {                                                                                                 
       quality: 50, destinationType: destinationType.FILE_URI,  sourceType: pictureSource.PHOTOLIBRARY
     }); //get picture
 }); // click
+
+
+
+
 $('#give-item input, #give-item textarea').change(function(event) {
-  var update_params = [];
+//  var update_params = [];
 //  update_params.push(event.target.id);
+console.log("call S	-	Y	-	N	-	C ");
   new_item.sync($(event.target));
   
 
@@ -281,23 +256,23 @@ $("#facebook-login").click(function() {
 $("#offer-item").click(function(event) {
     event.preventDefault();
     new_item.publish();
+    
+
+    
+    
+    
+    
+    
     alert("Thanks for offering!");
      clearThumb();
-    $('#give-item"').reset();
+   // $('#give-item').reset();
    // $.mobile.changePage($('#give'));
-    new_item = new Item();  
+  //  new_item = new Item();  
 }); // click
 
 $('#photo-clear').click(function(event) {
   clearThumb();
 }); // click
-$('#login-submit').click(function(event) {
-   $.post(BASE_URL+"/auth", { identity: "duncfw@gmail.com", password: "password" },
-   function(data) {
-     alert("Data Loaded: " + data);
-     $('#login').dialog('close');
-   });
-}); // click
 
 
 
@@ -305,14 +280,14 @@ $('#login-submit').click(function(event) {
 
 
 
-$('#take').live('pageshow', function (event, ui) {
+$('#me').live('pageshow', function (event, ui) {
   $.mobile.loading('show',{
   	text: 'Loading...',
   	textVisible: true,
   	theme: 'b',
   });
   $.ajaxSetup({ cache: false });
-	$.getJSON(encodeURI(BASE_URL+"/item/item_list"+ '?' + Math.round(new Date().getTime())), renderItems);
+	$.getJSON(encodeURI(BASE_URL+"/item/item_list"+ '?' + Math.round(new Date().getTime())), null,renderItems);
      
 }); // show
 
@@ -330,21 +305,55 @@ function newItem() {
 
 
 function onDeviceReady() {
+
+	navigator.splashscreen.hide();
+	
+	
+
     pictureSource=navigator.camera.PictureSourceType;
     destinationType=navigator.camera.DestinationType;
 
     try {
-    FB.init({ appId: "168526436623358", nativeInterface: CDV.FB, useCachedDialogs: false });
+    	if ((typeof cordova == 'undefined') && (typeof Cordova == 'undefined')) alert('Cordova variable does not exist. Check that you have included cordova.js correctly');
+		if (typeof CDV == 'undefined') alert('CDV variable does not exist. Check that you have included cdv-plugin-fb-connect.js correctly');
+		if (typeof FB == 'undefined') alert('FB variable does not exist. Check that you have included the Facebook JS SDK file.');
+		       
+	/* 	FB.Event.subscribe('auth.login', function(response) {
+		                   alert('auth.login event');
+		                   });
+		
+		FB.Event.subscribe('auth.logout', function(response) {
+		                   alert('auth.logout event');
+		                   });
+		        
+		FB.Event.subscribe('auth.sessionChange', function(response) {
+		                   alert('auth.sessionChange event');
+		                   });
+		
+		FB.Event.subscribe('auth.statusChange', function(response) {
+		                   alert('auth.statusChange event');
+		                   }); */
+		    
     
-        /*console.log("===========FACEBOOK LOGIN");
-        FB.login(function(response) {
-            if (response.authResponse) {
-                console.log("signed in FB");
-            } else {
-                console.log("not signed in FB");
-            }
+
+    	 FB.init({ appId: "168526436623358", nativeInterface: CDV.FB, useCachedDialogs: false });
+    	 
+    	 FB.login(function () {
+	    	 FB.api('/me', function(response) {
+			     console.log('me ' + JSON.stringify(response) + '.');
+			 });
+		 }, {scope: 'email,read_friendlists,publish_stream'});
+    	 
+    	/* FB.login(function(response) {
+ 			console.log('login , ' + JSON.stringify(response) + '.');
         }); */
+    	 
+		 
+		 
+        console.log("=====FACEBOOK LOGIN======");
+ 
     } catch (e) {
+      console.log("login failed");
       console.log(e);
     }
                                       
@@ -373,91 +382,44 @@ function showThumb(imageURI) {
 /********************
 Apply controllers to view 
 *********************/ 
-// Called when a photo is successfully retrieved
-function takePhotoURI(imageURI) {
-  // Uncomment to view the image file URI 
-   console.log(imageURI);
-     
-
-  $.post(   BASE_URL+"/auth", 
-  			{ identity: "duncfw@gmail.com", password: "password" },
-			function(data) { alert("Auth success"); } ,
-			function(data) { alert("Auth fail"); } );
-
-  var options = new FileUploadOptions();
-  options.fileKey="file";
-  options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1)+".jpg";
-  options.mimeType="image/jpeg";
-
-  var params = {
-      "title" : $('#title').val(),
-      "user_id" : "duncfw@gmail.com",
-      "access_token" : access_token 
-      }; 
-
-  options.params = params;
-
-  var ft = new FileTransfer();
-  ft.onprogress = function(progressEvent) {
-      if (progressEvent.lengthComputable) {
-        $("#progress-bar").width ( Math.floor(progressEvent.loaded / progressEvent.total) + "%");
-        
-        console.log("WIDTH:" + (progressEvent.loaded / progressEvent.total) + "%");
-      }
-  };
-  ft.upload(imageURI, encodeURI(BASE_URL+"/item/item_put"), itemPutSuccess, itemPutFail, options);
-  
-}
 
 function renderItems(items) {
-        $('#results-list').html('');
+        $('#me .offer-list').html('');
 
        $.each(items, function(index) {
-          $('#results-list').append($('<li>')
-                            .append('<img src="'+items[index].datafile.substring(0, items[index].datafile.length - 4)+'_thumb.jpg" />')
-                            .append($('<a>'+items[index].keywords+ '</a>')
-                              .attr({ 'href' : items[index].datafile , 'data-rel' : "dialog"     }   )
-                              )                 
-          );
-         // $('#results-list').append('<br />');
+       
+       
+			$('#me .offer-list').append($('<li/>', { //build a li element
+			    html: $('<a/>', { //with a A element inside it
+			            href: items[index].datafile, //set the href for the link
+			            'data-rel': 'dialog',
+			            html: '<img class"ui-li-icon" src="'
+			            	   +items[index].datafile.substring(0, items[index].datafile.length - 4)
+			            	   +'_thumb.jpg" />'
+			            	   +'<h3 class="ui-li-heading">'
+			            	   +items[index].keywords+ '</h3>'
+			          })
+			})); 
+   
         });
-        $('#results-list').listview('refresh');
-    /*    $('#results-list a').click(function () {
+        $('#me .offer-list').listview('refresh');
+       $('#me .offer-list a').click(function () {
           $.mobile.loading('show',{
           	text: 'Loading item...',
           	textVisible: true,
           	theme: 'b',
           });
-        });    */
+        });   /*  */
         
 
-        console.log($('#results-list').html());
+        console.log($('#me .offer-list').html());
         $.mobile.loading('hide');
 }
 
 
 
-function itemPutSuccess(r) {
-  console.log("Code = " + r.responseCode);
-  console.log("Response = " + r.response);
-  console.log("Sent = " + r.bytesSent);
-  
-  var data, dataReceived = false;
-  
-  $.getJSON(r.response,function(json){
-    data = json.tst;
-    dataReceived = true;
-    console.log(data);         
-  });
-  destinationImageURI =  BASE_URL + data.upload_date.image_url;
-  console.log(destinationImageURI);  
-}
 
- function itemPutFail(error) {
-     alert("An error has occurred: Code = " + error.code);
-     console.log("upload error source " + error.source);
-     console.log("upload error target " + error.target);
- }
+
  
  function testAPI() {
     console.log('Welcome!  Fetching your information.... ');
@@ -469,6 +431,24 @@ function onPhotoFail(error){
   console.log(error);
 }
 
+
+
+
+
+
+
+
+$('a').click( function (e) {
+	if ( e.hash !="") {
+		//e.preventDefault();
+		//$('div[data-role=page]').hide();
+		//$(this.hash).class();
+		$('.action-bar a').removeClass('active');
+		$(e.target).addClass('active');
+		$('#title').html ( $(this.hash).attr('title'));
+	//	$(this.hash).show();
+	}
+});
   </script>
 </body>
 </html>

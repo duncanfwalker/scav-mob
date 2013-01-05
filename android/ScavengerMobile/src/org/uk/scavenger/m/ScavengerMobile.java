@@ -29,7 +29,10 @@ public class ScavengerMobile extends DroidGap
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        super.loadUrl("file:///android_asset/www/index.html");
+        super.setIntegerProperty("splashscreen", R.drawable.splash);
+        super.setIntegerProperty("loadUrlTimeoutValue", 10000); 
+        super.loadUrl("file:///android_asset/www/index.html",10000);
+       
     }
 }
 
