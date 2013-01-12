@@ -1,11 +1,11 @@
 function startupView() {
 	this.settings = new SettingsList();
-	this.isFirstLoad = (this.settings.get('identity') == null);
+	this.isFirstLoad = (this.settings.get('username') == null);
 	
 	if(this.isFirstLoad ) {
 		this.render();
 	} else {
-		$( "#log" ).text("Welcome "+this.settings.get('identity'));
+		$( "#log" ).text("Welcome "+this.settings.get('username'));
 		//$( "#log" ).popup( "open" );
 
 		//$('#login').hide();
@@ -16,17 +16,11 @@ function startupView() {
 }
 
 startupView.prototype.render = function () {	
-	var  data = { 'fields' : [
-		{ 'tag' : 'input', 'type' : 'text', 'label' : 'Username/email', 'id' : 'identity' },
-		{ 'tag' : 'input', 'type' : 'password', 'label' : 'Password', 'id' : 'password' },
-		{ 'tag' : 'select', 'type' : 'checkbox', 'label' : 'Post to Facebook', 'id' : 'post-to-facebook', 'role': 'slider', 'options' :
-			[{'option': 'No', 'value':'0'} ,{ 'option': 'Yes', 'value':'1' }] 
-		}
-	]};
+
 	var startup = this;
 
     template = Hogan.compile($("#template-setting").html());
-    $('#login-form').append(template.render(data));
+    $('#login-form').append(template.render(this.settings.fields));
     $('#login-form').append( 
 	    $('<a/>').attr({
 				  'href': '#',
@@ -45,16 +39,16 @@ startupView.prototype.render = function () {
 	
 startupView.prototype.save = function( ) {
 	   var startupSettings = this.settings;
-	   $.post(BASE_URL+"/auth", { identity: "dummy@email.com", password: "password" },
-	   function(data) {
-		
-		 $.mobile.changePage($('#give'));
-		 startupSettings.sync({ 'identity': $('#identity').val() });
-		 
-		 alert("Setup complete: " + data);
-
-	        
-	    // $('#login').dialog('close');
-	   });
+	   
+	   SC.login ( { user: "dummy@email.com", password: "password" }, function (data) {
+			 startupSettings.sync(
+					 { 'username': $('#username').val(),
+					    'access_token' : data.access_token	 
+					 });
+			 
+			 $.mobile.changePage($('#give'));
+			 alert("Setup complete: " + data);
+		} );
+	   
 }
 	

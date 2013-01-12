@@ -7,7 +7,7 @@ $(document).ready(function() {
 	
 	
 //$( "#login" ).popup( "open" );
-	});
+});
 
 
 var SC = new Object();
@@ -25,22 +25,20 @@ SC.init = function()
 
 };
 
-SC.login = function()
+SC.login = function(params,callback)
 {
-
-
-
-
+   $.post(this.BASE_URL+"/auth", params,callback);
 };
 
 
-SC.api = function(method,params,callback,file)
+SC.api = function(uri,request_params,settings,callback,file)
 {
+	request_params = typeof request_params !== 'undefined' ? request_params : {};
 	try {	
 		var debug  = true;
-		params['access_token'] = this.access_token;
+		request_params['access_token'] = this.access_token;
 	
-		if (debug) console.log( "API params:"+ JSON.stringify(params) ); 
+		if (debug) console.log( "API params:"+ JSON.stringify(request_params) ); 
 	
 	
 		if (file) {
@@ -48,22 +46,30 @@ SC.api = function(method,params,callback,file)
 			options.fileKey="file";
 			options.fileName=file.substr(file.lastIndexOf('/')+1)+".jpg";
 			options.mimeType="image/jpeg";
-			options.params = params;
+			options.params = request_params;
 	
 			var ft = new FileTransfer();
-			ft.upload(file, encodeURI(this.BASE_URL+method),
+			ft.upload(file, encodeURI(this.BASE_URL+uri),
 					function (data) { var response = jQuery.parseJSON(data.response);
 									  console.log("API response: "+  JSON.stringify(response) );
 									  callback(response)}, 
 					function (data) { callback(jQuery.parseJSON(data))}, 
 					options);
 		} else {
-			$.post(  BASE_URL+method, 
-					params,
-					callback,
-					"json"
-			);
+			console.log(settings.type+" / "+this.BASE_URL+uri+" / "+JSON.stringify(request_params));
+			
+			$.ajax({
+				  type: settings.type,
+				  url: this.BASE_URL+uri,
+				  data: request_params
+				  
+				}).done( function (rsp) {
+						  console.log("API response: "+  JSON.stringify(rsp) );
+						  callback(jQuery.parseJSON(rsp));
+					});
 		}
+		
+		
 		
 		
 

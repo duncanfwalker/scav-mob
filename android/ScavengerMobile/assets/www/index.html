@@ -13,7 +13,7 @@
 <script type="text/javascript" charset="utf-8" src="libs/hogan-2.0.0.js"></script>
 
 <script type="text/javascript" charset="utf-8" src="js/scav-connect.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/item.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/offer.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/SettingsList.js"></script>
 <script type="text/javascript" charset="utf-8" src="js/StartupView.js"></script>
 
@@ -24,11 +24,11 @@
 
 </head>
 <body>
+
 	<div id="action-bar" data-id="action" data-theme="a" data-role="header"
 		data-position="fixed" role="header">
 		<h1 id="title"></h1>
-		<a href="#give" class="give-button">G</a> <!--  <a href="#take">S</a>--> <a href="#me">&lt;</a>
-
+		<a href="#give" class="action">G</a> <!--  <a href="#take">S</a>--> <a href="#me" class="action">&lt;</a>
 	</div>
 
 
@@ -37,14 +37,14 @@
 
 	<div id="data"></div>
 	<div title="Give" data-role="page" id="give">
+			<div data-role="content">
 
-		<div data-role="content">
 			<!--<a id="facebook-login" data-role="button">Facebook login dialog</a>
 				  <a href="#login" id="scavenger-login" data-rel="dialog" data-role="button">Mobile Login</a>  -->
-			<form id="give-item" action="">
-				<fieldset id="new-item-image" class="ui-body-b">
+			<form id="give-offer" action="">
+				<fieldset id="new-offer-image" class="ui-body-b">
 					<!--data-type="horizontal" -->
-					<div id="new-item-image-preview">
+					<div id="new-offer-image-preview">
 						<img style="padding: 20px 0;" class="image-placeholder"
 							src="http://codiqa.com/static/images/v2/image.png" alt="image" />
 
@@ -52,7 +52,7 @@
 						<div id="progress-bar"
 							style="height: 10px; width: 0; background-color: red;"></div>
 					</div>
-					<div id="image-chooser" class="new-item-image-controls"
+					<div id="image-chooser" class="new-offer-image-controls"
 						data-role="controlgroup">
 						<a id="photo-get-new" data-role="button" data-transition="none"
 							href="#page1" data-theme="c">Capture </a> <a
@@ -90,7 +90,7 @@
 						</div>
 						<div data-role="fieldcontain">
 							<fieldset data-role="controlgroup" data-mini="true">
-								<label for="slider1"> Remove my item after </label> <input
+								<label for="slider1"> Remove my offer after </label> <input
 									type="range" name="slider" value="30" min="0" max="60"
 									data-highlight="true" />
 							</fieldset>
@@ -99,7 +99,7 @@
 				</div> -->
 
 
-				<input id="offer-item" type="submit" data-theme="b"
+				<input id="make-offer" type="submit" data-theme="b"
 					data-icon="arrow-r" data-iconpos="right" value="Offer this now" />
 			</form>
 		</div>
@@ -117,7 +117,13 @@
 	</div>
 
 	<div title="Me" data-role="page" id="me">
-	
+
+<!--			<div class="context-menu" data-role="navbar">
+			<ul>
+				<li><a href="#me">Offers</a></li>
+				<li><a href="#me-settings" class="ui-btn-active">Settings</a></li>
+			</ul>
+		</div> -->
 			<div data-role="content">
 			<div id="search-results">
 				<ul class="offer-list" data-role="listview">
@@ -128,7 +134,19 @@
 	
 	
 	</div>
-
+ 	<div title="My Settings" data-role="page" id="me-settings">
+<!--			<div class="context-menu" data-role="navbar">
+			<ul>
+				<li><a href="#me">Offers</a></li>
+				<li><a href="#me-settings" class="ui-btn-active">Settings</a></li>
+			</ul>
+		</div> -->
+		<div id="settings-list" data-role="content">
+			<ul data-role="listview" id="settings-menu">
+			</ul>
+		</div>
+	
+	</div>
 
 
 	<div title="Login" id="login" data-role="page">
@@ -158,7 +176,15 @@
 	  {{#options}}<option value="{{value}}">{{option}}</option>{{/options}}
 	</{{tag}}></p>
 {{/fields}}
-	</script>		
+	</script>
+	
+<script id="template-settings-list" type="text/x-hogan-template">
+
+{{#fields}}
+	<li><strong>{{label}}</strong>:<div style="text-align: right; font-weight: normal;">{{value}}</div></li>
+{{/fields}}
+
+	</script>			
 </div>
 	
 	
@@ -168,8 +194,8 @@
 	
 	<script>
 
-var new_item = new Item();
-
+var new_offer = new Offer();
+var settings = new SettingsList();
 
 
 $( document ).on( "mobileinit", function() {
@@ -189,14 +215,13 @@ document.addEventListener("deviceready",onDeviceReady,false);
 
 
     
-var friendIDs = [];
-var fdata;
+//var friendIDs = [];
+//var fdata;
 var pictureSource;   // picture source
 var destinationType; // sets the format of returned value 
-var destinationImageURI;
-var access_token = "1274brad1274brad1274brad1274brad";
-var BASE_URL = "http://dev.scavenger.org.uk/api";
-var item_id;
+//var destinationImageURI;
+//var access_token = "1274brad1274brad1274brad1274brad";
+//var BASE_URL = "http://dev.scavenger.org.uk/api";
 
 
 
@@ -207,9 +232,9 @@ Apply controllers to view
 *********************/  
 $("#photo-get-new").click(function(event) {
    navigator.camera.getPicture(function (imageURI) { 
-          new_item.image_local_uri  =  imageURI;
+          new_offer.image_local_uri  =  imageURI;
           showThumb(imageURI);
-          new_item.sync($(event.target));
+          new_offer.sync($(event.target));
           }, function () {}, { 
       quality: 50,  targetWidth: 400, targetHeight: 400,  destinationType: destinationType.FILE_URI 
       }); //getpicture
@@ -217,9 +242,9 @@ $("#photo-get-new").click(function(event) {
 
 $("#photo-get-existing").click(function(event) {
    navigator.camera.getPicture(function (imageURI) { 
-          new_item.image_local_uri =  imageURI;
+          new_offer.image_local_uri =  imageURI;
           showThumb(imageURI);
-          new_item.sync($(event.target));
+          new_offer.sync($(event.target));
           }, function () {}, {                                                                                                 
       quality: 50, destinationType: destinationType.FILE_URI,  sourceType: pictureSource.PHOTOLIBRARY
     }); //get picture
@@ -228,11 +253,11 @@ $("#photo-get-existing").click(function(event) {
 
 
 
-$('#give-item input, #give-item textarea').change(function(event) {
+$('#give-offer input, #give-offer textarea').change(function(event) {
 //  var update_params = [];
 //  update_params.push(event.target.id);
 console.log("call S	-	Y	-	N	-	C ");
-  new_item.sync($(event.target));
+  new_offer.sync($(event.target));
   
 
 });
@@ -253,21 +278,15 @@ $("#facebook-login").click(function() {
      );
 }); // click
 
-$("#offer-item").click(function(event) {
+$("#make-offer").click(function(event) {
     event.preventDefault();
-    new_item.publish();
-    
-
-    
-    
-    
-    
+    new_offer.publish();
     
     alert("Thanks for offering!");
      clearThumb();
-   // $('#give-item').reset();
+   // $('#give-offer').reset();
    // $.mobile.changePage($('#give'));
-  //  new_item = new Item();  
+  //  new_offer = new Item();  
 }); // click
 
 $('#photo-clear').click(function(event) {
@@ -275,7 +294,10 @@ $('#photo-clear').click(function(event) {
 }); // click
 
 
+$('#me-settings').live('pageshow', function (event, ui) {
+	settings.renderLabelList();
 
+});
 
 
 
@@ -287,15 +309,14 @@ $('#me').live('pageshow', function (event, ui) {
   	theme: 'b',
   });
   $.ajaxSetup({ cache: false });
-	$.getJSON(encodeURI(BASE_URL+"/item/item_list"+ '?' + Math.round(new Date().getTime())), null,renderItems);
-     
+  SC.api("/offer/offers_list",{username: settings.get('username')},{'type':'GET'},renderItems);
 }); // show
 
 
 
 
 function newItem() {
-  $.post(  BASE_URL+"/item/item_update", 
+  $.post(  BASE_URL+"/offer/offer_update", 
   			   update_params,
 		       function(data) { console.log("updated ok"); } ,
 		       function(data) { console.log("failed to update"); } 
@@ -304,10 +325,17 @@ function newItem() {
 
 
 
+
+function onMenuKeyDown() {
+	$.mobile.changePage($('#me-settings'));
+}
+
+
+
 function onDeviceReady() {
 
 	navigator.splashscreen.hide();
-	
+	document.addEventListener("menubutton", onMenuKeyDown, false);
 	
 
     pictureSource=navigator.camera.PictureSourceType;
@@ -317,6 +345,9 @@ function onDeviceReady() {
     	if ((typeof cordova == 'undefined') && (typeof Cordova == 'undefined')) alert('Cordova variable does not exist. Check that you have included cordova.js correctly');
 		if (typeof CDV == 'undefined') alert('CDV variable does not exist. Check that you have included cdv-plugin-fb-connect.js correctly');
 		if (typeof FB == 'undefined') alert('FB variable does not exist. Check that you have included the Facebook JS SDK file.');
+	
+	
+	
 		       
 	/* 	FB.Event.subscribe('auth.login', function(response) {
 		                   alert('auth.login event');
@@ -337,7 +368,7 @@ function onDeviceReady() {
     
 
     	 FB.init({ appId: "168526436623358", nativeInterface: CDV.FB, useCachedDialogs: false });
-    	 
+    	 console.log("=====FACEBOOK LOGIN======");
     	 FB.login(function () {
 	    	 FB.api('/me', function(response) {
 			     console.log('me ' + JSON.stringify(response) + '.');
@@ -350,7 +381,7 @@ function onDeviceReady() {
     	 
 		 
 		 
-        console.log("=====FACEBOOK LOGIN======");
+      
  
     } catch (e) {
       console.log("login failed");
@@ -365,7 +396,7 @@ function clearThumb() {
   $('.image-placeholder').show();
   $('#image-chooser').show();
   $('#image-editor').hide();
-  $('#new-item-image-preview').width('29%');
+  $('#new-offer-image-preview').width('29%');
   $('#smallImage').attr("src","");
 }
 
@@ -374,7 +405,7 @@ function showThumb(imageURI) {
   $('.image-placeholder').hide();
   $('#image-chooser').hide();
   $('#image-editor').show();
-  $('#new-item-image-preview').width('100%');
+  $('#new-offer-image-preview').width('100%');
   $('#smallImage').attr("src",imageURI);
 
 }
@@ -383,21 +414,21 @@ function showThumb(imageURI) {
 Apply controllers to view 
 *********************/ 
 
-function renderItems(items) {
+function renderItems(offers) {
         $('#me .offer-list').html('');
-
-       $.each(items, function(index) {
+		console.log(JSON.stringify(offers));
+       $.each(offers, function(index) {
        
        
 			$('#me .offer-list').append($('<li/>', { //build a li element
 			    html: $('<a/>', { //with a A element inside it
-			            href: items[index].datafile, //set the href for the link
+			            href: offers[index].datafile, //set the href for the link
 			            'data-rel': 'dialog',
 			            html: '<img class"ui-li-icon" src="'
-			            	   +items[index].datafile.substring(0, items[index].datafile.length - 4)
+			            	   +offers[index].datafile.substring(0, offers[index].datafile.length - 4)
 			            	   +'_thumb.jpg" />'
 			            	   +'<h3 class="ui-li-heading">'
-			            	   +items[index].keywords+ '</h3>'
+			            	   +offers[index].keywords+ '</h3>'
 			          })
 			})); 
    
