@@ -1,16 +1,12 @@
 function startupView() {
 	this.settings = new SettingsList();
-	this.isFirstLoad = (this.settings.get('username') == null);
+	this.isFirstLoad = (SettingsList.get('username') == null && !(navigator.userAgent.toLowerCase().indexOf('chrome') > -1));
 	
 	if(this.isFirstLoad ) {
 		this.render();
 	} else {
-		$( "#log" ).text("Welcome "+this.settings.get('username'));
-		//$( "#log" ).popup( "open" );
-
-		//$('#login').hide();
-		$.mobile.changePage($('#give'));
-		
+		//alert("Hi "+SettingsList.get('username'));
+		$.mobile.changePage($('#give'));	
 	}
 	
 }
@@ -19,8 +15,8 @@ startupView.prototype.render = function () {
 
 	var startup = this;
 
-    template = Hogan.compile($("#template-setting").html());
-    $('#login-form').append(template.render(this.settings.fields));
+    template = Hogan.compile($("#template-startup").html());
+    $('#login-form').append(template.render(this.settings.items));
     $('#login-form').append( 
 	    $('<a/>').attr({
 				  'href': '#',
@@ -30,24 +26,28 @@ startupView.prototype.render = function () {
 				.text('Login')
 				.click( function () { startup.save() })
 	);
-    $.mobile.changePage($('#login'),{  role: 'dialog'});
-    
+    $("#post-to-facebook").click(function() {
+	   	 FB.login(function () {
+	    	 FB.api('/me', function(response) {
+			     console.log('me ' + JSON.stringify(response) + '.');
+			 });
+		 }, {scope: 'email,read_friendlists,publish_stream'}); 
+	}); // click	
+    $.mobile.changePage($('#login'));   
 }
 
 
 
 	
-startupView.prototype.save = function( ) {
-	   var startupSettings = this.settings;
-	   
-	   SC.login ( { user: "dummy@email.com", password: "password" }, function (data) {
-			 startupSettings.sync(
+startupView.prototype.save = function( ) {   
+	   SC.login ( { user: "dummy@email.com", password: "password" }, function (jqXHR, textStatus, errorThrown ) {
+		   SettingsList.sync (
 					 { 'username': $('#username').val(),
-					    'access_token' : data.access_token	 
+					    'access_token' : jqXHR.access_token	 
 					 });
 			 
 			 $.mobile.changePage($('#give'));
-			 alert("Setup complete: " + data);
+			// alert("Setup complete: " + JSON.stringify(jqXHR));
 		} );
 	   
 }

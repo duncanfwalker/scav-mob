@@ -11,11 +11,10 @@ $(document).ready(function() {
 
 
 var SC = new Object();
-window.onload= function()
-{
-	SC.access_token = "1274brad1274brad1274brad1274brad";
-	SC.BASE_URL = "http://dev.scavenger.org.uk/api";
-};
+
+SC.access_token = "1274brad1274brad1274brad1274brad";
+SC.BASE_URL = "http://dev.scavenger.org.uk/api";
+
 
 SC.init = function()
 {
@@ -27,7 +26,18 @@ SC.init = function()
 
 SC.login = function(params,callback)
 {
-   $.post(this.BASE_URL+"/auth", params,callback);
+	$.ajax({
+		  data : params,
+		  url: this.BASE_URL+"/auth"
+		//  always:
+		})
+		//.always( callback ( jqXHR, textStatus, errorThrown ) );
+		.always(function(jqXHR, textStatus, errorThrown) {
+			callback ( jqXHR, textStatus, errorThrown )
+		});	
+	
+  // $.post(this.BASE_URL+"/auth", params)
+ //  	.complete( callback(data) );
 };
 
 
@@ -64,7 +74,7 @@ SC.api = function(uri,request_params,settings,callback,file)
 				  data: request_params
 				  
 				}).done( function (rsp) {
-						  console.log("API response: "+  JSON.stringify(rsp) );
+						  console.log("API response: ");//+  JSON.stringify(rsp) );
 						  callback(jQuery.parseJSON(rsp));
 					});
 		}

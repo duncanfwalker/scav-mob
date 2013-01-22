@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html class="ui-mobile">
+<head>
+<title>Scavenger Mobile</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" charset="utf-8" src="libs/cordova-2.2.0.js"></script>
+<script type="text/javascript" charset="utf-8" src="libs/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="libs/jquery.mobile-1.2.0.min.js"></script> 
+<script type="text/javascript" charset="utf-8" src="libs/cdv-plugin-fb-connect.js"></script>
+<script type="text/javascript" charset="utf-8" src="libs/facebook_js_sdk.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/scav-connect.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/item.js"></script>
+
+<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.2.0.min.css" />
+<link rel="stylesheet" type="text/css" href="css/scavenger.css" />
+<style type="text/css">
+#action-bar {
+
+}
+</style>
+
+
+<style>
+#action-bar {
+	display: visible;
+	position: fixed;
+	top: 0;
+	z-index: 10;
+	background-color: black;
+	width: 100%;
+	padding:5px;
+	
+}
+#action-bar h1 {
+	color: white;
+	font-size: inherit;
+	float: left;
+	margin: 0px;
+}
+#action-bar a {
+	color: lightgrey;
+	width: 2rem;
+	float: right;
+	text-decoration: none;
+}
+#action-bar a:hover {
+	color: white;
+	text-decoration: none;
+}
+#action-bar a.active {
+	text-decoration: underline;
+}
+
+div[data-role='page'] {
+	margin-top: 2rem;
+}
+
+
+</style>
+</head>
+<body>
+
+<div id="action-bar" data-id="action" data-theme="a" data-role="header" data-position="fixed" role="header">
+	<h1 id="title"></h1>
+
+	<a href="#give">G</a>
+	<a href="#take" >S</a>
+	<a href="#me-items" >&lt;</a>
+</div>
+
+<div title="My items" data-role="page" id="me-items">
+
+
+This is the my items page.	
+
+</div>
+
+
+<div title="Giving" data-role="page" id="give">
+This is the give page.
+
+
+</div>
+
+<div title="Search" data-role="page" id="take">
+This is the take page.
+</div>
+
+
+<script>
+$('a').click( function (e) {
+	if ( e.hash !="") {
+		//e.preventDefault();
+		//$('div[data-role=page]').hide();
+		//$(this.hash).class();
+		$('#action-bar').removeClass('active');
+		$(e.target).addClass('active');
+		$('#title').html ( $(this.hash).attr('title'));
+	//	$(this.hash).show();
+	}
+});
+
+</script>
+</body>
+</html>
