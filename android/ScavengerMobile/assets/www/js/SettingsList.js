@@ -5,8 +5,8 @@ function SettingsList() {
 	this.storage =  window.localStorage;
 	
 	this.items = { 'fields' : [
-	                  		{ 'tag' : 'input', 'type' : 'text', 'placeholder' : 'Email address', 'id' : 'username' },
-	                  		{ 'tag' : 'input', 'type' : 'password', 'placeholder' : 'Password', 'id' : 'password' },
+	                  		{ 'tag' : 'input', 'type' : 'text', 'placeholder' : 'Email address', 'id' : 'email','value' : 'duncfw@gmail.com'  },
+	                  		{ 'tag' : 'input', 'type' : 'password', 'placeholder' : 'Password', 'id' : 'password','value' : 'Badger84'  },
 	                  	/*	{ 'tag' : 'select', 'type' : 'checkbox', 'label' : 'Post to my Facebook wall', 'id' : 'post-to-facebook', 'role': 'slider', 'options' :
 	                  			[{'option': 'No', 'value':'0'} ,{ 'option': 'Yes', 'value':'1' }] 
 	                  		},*/

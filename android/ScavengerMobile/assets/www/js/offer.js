@@ -106,16 +106,19 @@ $(function() {
 	
 	
 	function OfferFormView() {
+	
 		this.initialise();
 		var self = this;
-
+	
 		$("#make-offer").click(function(event) {
 			event.preventDefault();
+			alert("Thanks for offering!");
 			self.offer.publish();
 
-			alert("Thanks for offering!");
+			
 			self.initialise();
 		}); // click
+
 
 		$('#give-offer input, #give-offer textarea').change(function(event) {
 			self.sync(event);

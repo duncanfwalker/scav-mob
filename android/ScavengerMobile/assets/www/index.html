@@ -39,7 +39,7 @@
 	
 		<div class="action-bar" data-id="action"   data-position="fixed"  role="none">
 			<h1 class="title">New item</h1>
-			<div class="actions"><a id="make-offer" >Offer now &gt;</a> <!--  <a href="#take">S</a>--> <a href="#me" class="icon" >&lt;</a></div>
+			<div class="actions"><a href="#me" id="make-offer" >Offer now &gt;</a> <!--  <a href="#take">S</a>--> <a href="#me" class="icon" >&lt;</a></div>
 		</div>
 			<div data-role="content">
 
@@ -66,9 +66,10 @@
 					<div id="image-editor" data-role="controlgroup" class="ui-body-c"
 						data-type="horizontal">
 						<a id="photo-clear" data-role="button" data-icon="delete"
-							data-transition="none" href="#page1" data-theme="c">Clear </a> <a
+							data-transition="none" href="#page1" data-theme="c">Clear </a>
+							<!-- <a
 							id="photo-rotate" data-role="button" data-icon="forward"
-							data-transition="none" href="#page1" data-theme="c">Rotate</a>
+							data-transition="none" href="#page1" data-theme="c">Rotate</a> --> 
 					</div>
 				</fieldset>
 
@@ -138,7 +139,7 @@
 
 	<div title="Login" id="login" data-role="page">
 		<div id="infoMessage"></div>
-		<form id="login-form" method="post" accept-charset="utf-8">
+		<form id="login-form" action="#login" method="post" accept-charset="utf-8">
 		<!--  	<p><label for="identity">Email/Username:</label><input type="text"	name="identity" value="" id="identity"></p>
 			<p><label for="password">Password:</label><input type="password"name="password" value="" id="password"></p>
 	-->
@@ -169,7 +170,7 @@
 <h2>Hi, please login to Scavenger</h2>
 {{#fields}}	
     <p><label for="{{id}}">{{label}}</label>
-	<{{tag}} type="{{type}}" placeholder="{{placeholder}}" name="{{id}}" value="" id="{{id}}" data-role="{{role}}" {{checked}}> 
+	<{{tag}} type="{{type}}" placeholder="{{placeholder}}" value="{{value}}" name="{{id}}" value="" id="{{id}}" data-role="{{role}}" {{checked}}> 
 	  {{#options}}<option value="{{value}}">{{option}}</option>{{/options}}
 	</{{tag}}></p>
 {{/fields}}
@@ -203,7 +204,7 @@
 <div title="{{keywords}}" id="offer-{{item_id}}" data-role="page">
 	<div class="action-bar" data-id="action" data-theme="a" data-role="none" role="none">
 		<h1 class="title">Offer</h1>
-		<div class="actions"><a href="#me">Withdraw Offer</a><a data-rel="back" class="icon">Back</a></div>
+		<div class="actions"><!--<a href="#me">Withdraw Offer</a>--><a data-rel="back" class="icon">Back</a></div>
 	</div>
 	<div data-role="content">
 		<h1>{{keywords}}</h1>
@@ -438,5 +439,12 @@ function onPhotoFail(error){
 }
 
   </script>
+  
+  
+  
+  
+  
+  
+  
 </body>
 </html>

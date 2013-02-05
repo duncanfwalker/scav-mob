@@ -1,8 +1,8 @@
 function startupView() {
 	this.settings = new SettingsList();
-	this.isFirstLoad = (SettingsList.get('username') == null && !(navigator.userAgent.toLowerCase().indexOf('chrome') > -1));
+	this.isFirstLoad = (SettingsList.get('username') ==null || (navigator.userAgent.toLowerCase().indexOf('chrome') > -1)); // == null
 	
-	if(this.isFirstLoad ) {
+	if(this.isFirstLoad) {
 		this.render();
 	} else {
 		//alert("Hi "+SettingsList.get('username'));
@@ -16,15 +16,19 @@ startupView.prototype.render = function () {
 	var startup = this;
 
     template = Hogan.compile($("#template-startup").html());
+    $('#login-form').submit( function (e) { 
+    							e.preventDefault();
+    							startup.save(); 
+    							return false;});
     $('#login-form').append(template.render(this.settings.items));
     $('#login-form').append( 
-	    $('<a/>').attr({
-				  'href': '#',
+	    $('<input/>').attr({
+				 // 'href': '#',
 				  'id': 'login-submit',
+				  'value': 'Login',
+				  'type': 'submit',
 				  'data-role' : 'button'
-				})
-				.text('Login')
-				.click( function () { startup.save() })
+				})				
 	);
     $("#post-to-facebook").click(function() {
 	   	 FB.login(function () {
@@ -40,13 +44,21 @@ startupView.prototype.render = function () {
 
 	
 startupView.prototype.save = function( ) {   
-	   SC.login ( { user: "dummy@email.com", password: "password" }, function (jqXHR, textStatus, errorThrown ) {
-		   SettingsList.sync (
-					 { 'username': $('#username').val(),
-					    'access_token' : jqXHR.access_token	 
-					 });
-			 
-			 $.mobile.changePage($('#give'));
+	   SC.login ( { email: $('#email').val(), password: $('#password').val() }, function (jqXHR, textStatus, errorThrown ) {
+		  
+		   
+		   if (jqXHR.status == 'success') {
+			   
+			   SettingsList.sync (
+						 { 'username': $('#email').val(),
+						    'access_token': jqXHR.access_token	 
+							 
+						 });
+			   alert("Thanks, you're logged in");
+				 $.mobile.changePage($('#give'));   
+		   } else {
+			   alert('Failed to login. Check your username and password.');
+		   }
 			// alert("Setup complete: " + JSON.stringify(jqXHR));
 		} );
 	   

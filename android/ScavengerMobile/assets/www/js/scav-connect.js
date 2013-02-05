@@ -27,13 +27,17 @@ SC.init = function()
 SC.login = function(params,callback)
 {
 	$.ajax({
+		 type: "POST",
 		  data : params,
-		  url: this.BASE_URL+"/auth"
+		  url: this.BASE_URL+"/auth/authenticate",
+		  dataType: 'JSON'
 		//  always:
 		})
 		//.always( callback ( jqXHR, textStatus, errorThrown ) );
 		.always(function(jqXHR, textStatus, errorThrown) {
-			callback ( jqXHR, textStatus, errorThrown )
+		//	SC.access_token = jqXHR.
+			console.log("Login: "+  JSON.stringify(jqXHR) );
+			callback ( jqXHR, textStatus, errorThrown );
 		});	
 	
   // $.post(this.BASE_URL+"/auth", params)
@@ -46,8 +50,8 @@ SC.api = function(uri,request_params,settings,callback,file)
 	request_params = typeof request_params !== 'undefined' ? request_params : {};
 	try {	
 		var debug  = true;
-		request_params['access_token'] = this.access_token;
-	
+		request_params['access_token'] = SettingsList.get('access_token');
+		console.log("access_token: "+  this.access_token);
 		if (debug) console.log( "API params:"+ JSON.stringify(request_params) ); 
 	
 	
