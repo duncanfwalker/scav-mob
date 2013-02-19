@@ -1,7 +1,5 @@
-scav-mob
-========
-
 Scavenger Mobile 
+========
 
 Scavenger Mobile helps you use the gift economy website Scavenger.org.uk. It allows people to quickly share photos of the stuff they want to give away.
 
