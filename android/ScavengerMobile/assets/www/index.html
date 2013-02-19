@@ -1,450 +1,215 @@
 <!DOCTYPE html>
 <html class="ui-mobile">
-<head>
-<title>Scavenger Mobile</title>
+  <head>
+    <title>Scavenger Mobile
+    </title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0" />
+    <!--
+    <script type="text/javascript" charset="utf-8" src="libs/cordova-2.2.0.js"></script>
+    <script type="text/javascript" charset="utf-8" src="libs/cdv-plugin-fb-connect.js"></script>
+    <script type="text/javascript" charset="utf-8" src="libs/jquery-1.8.3.js"></script>
+    <script type="text/javascript" charset="utf-8" src="libs/jquery.mobile-1.2.0.js"></script>
+    <script type="text/javascript" charset="utf-8" src="libs/facebook_js_sdk.js"></script>
+    <script type="text/javascript" charset="utf-8" src="libs/hogan-2.0.0.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/scav-connect.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/offers.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/SettingsList.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/StartupView.js"></script>
+                   -->  
+    <script src="libs/json2.js"></script>  
+    <script src="libs/jquery.js"></script>  
+    <script src="libs/jquery.mobile.js"></script>
+    
+  
 
-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0" />
-
-<script type="text/javascript" charset="utf-8" src="libs/cordova-2.2.0.js"></script>
-<script type="text/javascript" charset="utf-8" src="libs/jquery-1.8.3.js"></script>
-<script type="text/javascript" charset="utf-8" src="libs/jquery.mobile-1.2.0.js"></script>
-<script type="text/javascript" charset="utf-8" src="libs/cdv-plugin-fb-connect.js"></script>
-<script type="text/javascript" charset="utf-8" src="libs/facebook_js_sdk.js"></script>
-<script type="text/javascript" charset="utf-8" src="libs/hogan-2.0.0.js"></script>
-
-<script type="text/javascript" charset="utf-8" src="js/scav-connect.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/offer.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/SettingsList.js"></script>
-<script type="text/javascript" charset="utf-8" src="js/StartupView.js"></script>
-
-
-<link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.2.0.min.css" />
-<link rel="stylesheet" type="text/css" href="css/scavenger.css" />
-
-
-</head>
-<body>
-
-
-
-
-
-	<div id="fb-root"></div>
-	<div id="log"></div>
-
-	<div id="data"></div>
-	<div title="Give" data-role="page" id="give">
-
-	<div id="settings-menu"  data-role="popup"></div>
-	
-		<div class="action-bar" data-id="action"   data-position="fixed"  role="none">
-			<h1 class="title">New item</h1>
-			<div class="actions"><a href="#me" id="make-offer" >Offer now &gt;</a> <!--  <a href="#take">S</a>--> <a href="#me" class="icon" >&lt;</a></div>
-		</div>
-			<div data-role="content">
-
-			<!--<a id="facebook-login" data-role="button">Facebook login dialog</a>
-				  <a href="#login" id="scavenger-login" data-rel="dialog" data-role="button">Mobile Login</a>  -->
-			<form id="give-offer" action="">
-				<fieldset id="new-offer-image" class="ui-body-b">
-					<!--data-type="horizontal" -->
-					<div id="new-offer-image-preview">
-						<img style="padding: 20px 0;" class="image-placeholder"
-							src="http://codiqa.com/static/images/v2/image.png" alt="image" />
-						<input id="image-src" type="hidden" value="" />
-						<img style="display: none; width: 95%;" id="smallImage" src="" />
-						<div id="progress-bar"
-							style="height: 10px; width: 0; background-color: red;"></div>
-					</div>
-					<div id="image-chooser" class="new-offer-image-controls"
-						data-role="controlgroup">
-						<a id="photo-get-new" data-role="button" data-transition="none"
-							href="#page1" data-theme="c">Capture </a> <a
-							id="photo-get-existing" data-role="button" data-transition="none"
-							href="#page1" data-theme="c">Browse</a>
-					</div>
-					<div id="image-editor" data-role="controlgroup" class="ui-body-c"
-						data-type="horizontal">
-						<a id="photo-clear" data-role="button" data-icon="delete"
-							data-transition="none" href="#page1" data-theme="c">Clear </a>
-							<!-- <a
-							id="photo-rotate" data-role="button" data-icon="forward"
-							data-transition="none" href="#page1" data-theme="c">Rotate</a> --> 
-					</div>
-				</fieldset>
-
-				<fieldset data-role="controlgroup" data-mini="true">
-					<label for="title"> </label> <input name="title" id="title"
-						placeholder="Title" value="" type="text" />
-				</fieldset>
-
-				<fieldset data-role="controlgroup" data-mini="false">
-					<label for="description"> </label>
-					<textarea name="description" id="description"
-						placeholder="Description" data-rows="20" row="20"></textarea>
-				</fieldset>
-				<!--	
-				<div data-role="collapsible-set">
-					<div data-role="collapsible" data-collapsed="true">
-					<h3>Advanced Options</h3>
-						<div data-role="fieldcontain">
-							<label for="selectmenu1"> </label> <select name=""
-								data-mini="true">
-								<option value="option1">Baby Items (0 - 2 years)</option>
-							</select>
-						</div>
-						<div data-role="fieldcontain">
-							<fieldset data-role="controlgroup" data-mini="true">
-								<label for="slider1"> Remove my offer after </label> <input
-									type="range" name="slider" value="30" min="0" max="60"
-									data-highlight="true" />
-							</fieldset>
-						</div>
-					</div>
-				</div> -->
-
-
-				<!--  <input id="make-offer" type="submit" data-theme="b"
-					data-icon="arrow-r" data-iconpos="right" value="Offer this now" />-->
-			</form>
-		</div>
-	</div>
-
-	<div title="Take" data-role="page" id="take">
-
-		<div data-role="content">
-			<div id="search-results">
-				<ul class="offer-list" data-role="listview">
-					<li></li>
-				</ul>
-			</div>
-			</div>
-	</div>
-
-	<div title="Me" data-role="page" id="me">
-		<div class="action-bar" data-id="action" data-theme="a" data-role="none" role="none">
-			<h1 class="title">My offers</h1>
-			<div class="actions"><a href="#give" class="icon">G</a> </div>
-		</div>
-		<div data-role="content">
-			<div class="search-results">
-				<ul class="offer-list" data-role="listview">
-					<li></li>
-				</ul>
-			</div>
-		</div>
-	</div>
-
-
-
-	<div title="Login" id="login" data-role="page">
-		<div id="infoMessage"></div>
-		<form id="login-form" action="#login" method="post" accept-charset="utf-8">
-		<!--  	<p><label for="identity">Email/Username:</label><input type="text"	name="identity" value="" id="identity"></p>
-			<p><label for="password">Password:</label><input type="password"name="password" value="" id="password"></p>
-	-->
-		
-		
-			<div id="log"></div>
-		</form>
-	</div>
-	
-	
-	<div id="offers"></div>
-	
-	
-<div id="templates">	
-
-
-	<script id="template-setting" type="text/x-hogan-template">
+    
+    <link rel="stylesheet" type="text/css" href="css/jquery.mobile.css" />
+    <link rel="stylesheet" type="text/css" href="css/scavenger.css" />
+  </head>
+  <body>	
+    <div id="fb-root">
+    </div>	
+    <div id="log">
+    </div>	
+    <div id="data">
+    </div>	
+    <div title="Give" data-role="page" id="give">	
+      <div id="settings-menu"  data-role="popup">
+      </div>	 		
+      <div class="action-bar" data-id="action"   data-position="fixed"  role="none">			
+        <h1 class="title">New item</h1>			
+        <div class="actions">
+          <a id="make-offer" >Offer now &gt;</a> 
+          <a href="#take" class="icon">S</a>
+          <a href="#me" class="icon" >&lt;</a>
+        </div>		
+      </div>			
+      <div data-role="content">			
+        <!--<a id="facebook-login" data-role="button">Facebook login dialog</a>
+        				  <a href="#login" id="scavenger-login" data-rel="dialog" data-role="button">Mobile Login</a> http://codiqa.com/static/images/v2/image.png -->			
+        <form id="give-offer" action="">				
+          <fieldset id="new-offer-image" class="ui-body-b">					
+            <!--data-type="horizontal" -->					
+            <div id="new-offer-image-preview">						
+              <img style="padding: 20px 0;" class="image-placeholder" src="" alt="image" />						
+              <input id="image-src" type="hidden" value="" />						
+              <img style="display: none; width: 95%;" id="smallImage" src="" />						
+              <div id="progress-bar" style="height: 10px; width: 0; background-color: red;">
+              </div>					
+            </div>					
+            <div id="image-chooser" class="new-offer-image-controls" data-role="controlgroup">						
+              <a id="photo-get-new" data-role="button" data-transition="none" 							href="#page1" data-theme="c">Capture </a> 
+              <a id="photo-get-existing" data-role="button" data-transition="none" 	href="#page1" data-theme="c">Browse</a>					
+            </div>					
+            <div id="image-editor" data-role="controlgroup" class="ui-body-c" 						data-type="horizontal">						
+              <a id="photo-clear" data-role="button" data-icon="delete" 							data-transition="none" href="#page1" data-theme="c">Clear </a> 
+              <a 							id="photo-rotate" data-role="button" data-icon="forward" 							data-transition="none" href="#page1" data-theme="c">Rotate</a>					
+            </div>				
+          </fieldset>				
+          <fieldset data-role="controlgroup" data-mini="false">					
+        
+            <input name="title" id="title" placeholder="Title" value="" type="text" />				
+          </fieldset>				
+          <fieldset data-role="controlgroup" data-mini="false">					
+            <label for="description"> 
+            </label>					
+<textarea name="description" id="description"
+						placeholder="Description" data-rows="20" row="20"></textarea>				
+          </fieldset>				
+          <!--	
+          				<div data-role="collapsible-set">
+          					<div data-role="collapsible" data-collapsed="true">
+          					<h3>Advanced Options</h3>
+          						<div data-role="fieldcontain">
+          							<label for="selectmenu1"> </label> <select name=""
+          								data-mini="true">
+          								<option value="option1">Baby Items (0 - 2 years)</option>
+          							</select>
+          						</div>
+          						<div data-role="fieldcontain">
+          							<fieldset data-role="controlgroup" data-mini="true">
+          								<label for="slider1"> Remove my offer after </label> <input
+          									type="range" name="slider" value="30" min="0" max="60"
+          									data-highlight="true" />
+          							</fieldset>
+          						</div>
+          					</div>
+          				</div> -->				
+          <!--  <input id="make-offer" type="submit" data-theme="b"
+          					data-icon="arrow-r" data-iconpos="right" value="Offer this now" />-->			
+        </form>		
+      </div>	
+    </div>	
+    <div title="Take" data-role="page" id="take">  	
+      <div class="action-bar" data-id="action" data-theme="a" data-role="none" role="none">			
+        <h1 class="title">Find items</h1>			
+        <div class="actions">
+          <a href="#give" class="icon" >G</a> 
+          <a href="#me" class="icon" >&lt;</a>
+        </div>		
+      </div>		
+      <div data-role="content">			
+        <div id="search-results">				
+          <ul class="offer-list" data-role="listview">					
+            <li>
+            </li>				
+          </ul>			
+        </div>			
+      </div>	
+    </div>	
+    <div title="Me" data-role="page" id="me">		
+      <div class="action-bar" data-id="action" data-theme="a" data-role="none" role="none">			
+        <h1 class="title">My offers</h1>			
+        <div class="actions">
+          <a href="#take" class="icon">S</a>
+          <a href="#give" class="icon">G</a>
+        </div>		
+      </div>		
+      <div data-role="content">			
+        <div id="my-offers"  class="search-results">				
+          <ul id="my-offers-browser" class="offer-list" data-role="listview">					
+            <li>
+            </li>				
+          </ul>			
+        </div>		
+      </div>	
+    </div>	
+    <div title="Login" id="login" data-role="page">		
+      <div id="infoMessage">
+      </div>		
+      <form id="login-form" method="post" accept-charset="utf-8">		
+        <!--  	<p><label for="identity">Email/Username:</label><input type="text"	name="identity" value="" id="identity"></p>
+        			<p><label for="password">Password:</label><input type="password"name="password" value="" id="password"></p>
+        	-->		 		 			
+        <div id="log">
+        </div>		
+      </form>	
+    </div>	 	 	
+    <div id="offers">
+    </div>	 	 
+    <div id="templates">	 	
+<script id="template-setting" type="text/x-hogan-template">
 {{#fields}}
 	<p><label for="{{id}}">{{label}}</label>
 	<{{tag}} type="{{type}}"	name="{{id}}" value="" id="{{id}}" data-role="{{role}}"> 
 	  {{#options}}<option value="{{value}}">{{option}}</option>{{/options}}
 	</{{tag}}></p>
 {{/fields}}
-	</script>
-	
-	
-<script id="template-startup" type="text/x-hogan-template">
+	</script> 	 	 
+<script id="template-startup" type="text/x-hogan-template"> 
 <h2>Hi, please login to Scavenger</h2>
 {{#fields}}	
     <p><label for="{{id}}">{{label}}</label>
-	<{{tag}} type="{{type}}" placeholder="{{placeholder}}" value="{{value}}" name="{{id}}" value="" id="{{id}}" data-role="{{role}}" {{checked}}> 
+	<{{tag}} type="{{type}}" placeholder="{{placeholder}}" name="{{id}}" value="" id="{{id}}" data-role="{{role}}" {{checked}}> 
 	  {{#options}}<option value="{{value}}">{{option}}</option>{{/options}}
 	</{{tag}}></p>
-{{/fields}}
-</script>
-	
-<script id="template-settings-list" type="text/x-hogan-template">
-
+{{/fields}} 
+</script> 	 
+<script id="template-settings-list" type="text/x-hogan-template"> 
 <ul data-role="listview" id="settings-list"  >
 {{#items}}	
 	<li>{{#link}}<a href="{{link}}">{{/link}}<strong>{{title}}</strong>: 	{{#value}}<div style="float: right; padding: 1rem 2rem;"><input id="id" type="checkbox" value={{value}}" /></div>{{/value}}
 	<div style="font-weight: normal; font-size: 0.8em;">
 	{{#summary}}{{value}}{{/summary}} {{description}}
-
 	</div>{{#link}}</a>{{/link}}</li>
-{{/items}}
+{{/items}} 
 </ul>
-	</script>		
-	
-	
+	</script> 		 	 	 
 <script id="template-offer-list" type="text/x-hogan-template">
 {{#offers}}	
 	<li><a href="#offer-{{item_id}}" data-rel="popup">
 	<img class"ui-li-icon" src="{{datafile}}"  />
  	<h3>{{keywords}}</h3></a></li>
-{{/offers}}
-</script>	
-
-
-<script id="template-offer" type="text/x-hogan-template">
-
-<div title="{{keywords}}" id="offer-{{item_id}}" data-role="page">
+{{/offers}} 
+</script> 	 
+<script id="template-offer-item" type="text/x-hogan-template">
+	<a href="#offer-{{item_id}}" data-rel="popup">
+	<img class"ui-li-icon" src="{{datafile}}"  />
+ 	<h3>{{title}} </h3></a> 
+</script> 	 
+<script id="template-offer" type="text/x-hogan-template"> 
+<div title="{{title}}" id="offer-{{item_id}}" class="offer" data-role="page">
 	<div class="action-bar" data-id="action" data-theme="a" data-role="none" role="none">
 		<h1 class="title">Offer</h1>
-		<div class="actions"><!--<a href="#me">Withdraw Offer</a>--><a data-rel="back" class="icon">Back</a></div>
+		<div class="actions"><a data-rel="back" class="icon">Back</a></div>
 	</div>
 	<div data-role="content">
-		<h1>{{keywords}}</h1>
+		<h1>{{title}} <small style="float: right;">{{daysleft()}} left</small></h1>
 		<img style="width: 90%; margin: 1rem auto;" src="{{datafile}}"  />
-		<p><strong>Description:</strong><br />{{addinfo}}</p>
-		<p><strong>Offered on:</strong><br /> {{removaltime}}</p>
-		<p><strong>Ends on:</strong><br /> {{dateadded}}</p>
-	</div>
-</div>
-
-</script>	
-</div>
-	
-	
-
- 
-	
-	
-	
-	<script>
+    <p><strong>Description:</strong><br /> {{description}}</p>
+		<p><strong>Offered on:</strong><br /> {{created}}</p>
+		<p><strong>Ends on:</strong><br /> {{end_date}}</p>
+    <p><a href="#me"  data-role="button" data-theme="r" data-icon="delete">Withdraw Offer</a></p>
+	</div> 
+</div> 
+</script> 	 
+    </div>	 	   	 	            
 
 
-
-$( document ).on( "mobileinit", function() {
-    // Make your jQuery Mobile framework configuration changes here!
-	$.support.cors = true;
-     
-    
-     $.extend(  $.mobile , {
-    	allowCrossDomainPages: 'true',
-    	defaultPageTransition: 'none'
- 	 });
-    
-});
-
-
-
-
-
-// Wait for Cordova to connect with the device
-document.addEventListener("deviceready",onDeviceReady,false);
-
-/********************
-Apply controllers to view 
-*********************/  
-
-
-
-
-$("#facebook-login").click(function() {
-   FB.login(
-     function(response) {
-       if (response.session) {
-       alert('logged in');
-       } else {
-       alert('not logged in');
-       }
-     },
-     { scope: "email" }
-     );
-}); // click
-
-
-
-
-
-/*
-
-
-$('#me').on('pageshow', function (event, ui) {
-  $.mobile.loading('show',{
-  	text: 'Loading...',
-  	textVisible: true,
-  	theme: 'b',
-  });
-  $.ajaxSetup({ cache: false });
-  SC.api("/offer/offers_list",{username: SettingsList.get('username')},{'type':'GET'},renderItems);
-}); // show
-
-*/
-
-
-
-
-
-	
-
-
-
-function onMenuKeyDown() {
-//	$( "#me-settings" ).popup( "open" );
-//$.mobile.changePage($('#me-settings'), {role:'popup'});
-	
-SettingsList.renderLabelList();
-}
-
-
-
-$(".title").click(function(e) {
-
-     onMenuKeyDown();
-});
-
-
-
-
-    
-    
-function handleResponseChange(response) {
-    console.log(JSON.stringify(response));
-}
-
-function onDeviceReady() {
-
-	navigator.splashscreen.hide();
-	document.addEventListener("menubutton", onMenuKeyDown, false);
-	
-    try {
-    	if ((typeof cordova == 'undefined') && (typeof Cordova == 'undefined')) alert('Cordova variable does not exist. Check that you have included cordova.js correctly');
-		if (typeof CDV == 'undefined') alert('CDV variable does not exist. Check that you have included cdv-plugin-fb-connect.js correctly');
-		if (typeof FB == 'undefined') alert('FB variable does not exist. Check that you have included the Facebook JS SDK file.');
-	
-
-    	FB.init({ appId: '168526436623358', 
-          status: true, 
-          cookie: false,
-          xfbml: false,
-          oauth: true,
-          nativeInterface: window.CDV.FB,
-          useCachedDialogs: false});
-
-    	FB.Event.subscribe('auth.authResponseChange', handleResponseChange);  
-
-	
-		       
-	/* 	FB.Event.subscribe('auth.login', function(response) {
-		                   alert('auth.login event');
-		                   });
-		
-		FB.Event.subscribe('auth.logout', function(response) {
-		                   alert('auth.logout event');
-		                   });
-		        
-		FB.Event.subscribe('auth.sessionChange', function(response) {
-		                   alert('auth.sessionChange event');
-		                   });
-		
-		FB.Event.subscribe('auth.statusChange', function(response) {
-		                   alert('auth.statusChange event');
-		                   }); */
-		    
-    
-
-    	// FB.init({ appId: "168526436623358", oauth : true, status: true, nativeInterface: CDV.FB, useCachedDialogs: false });
-
-		 
-	 
-    	
-    	 
-    	 
-    	/* console.log("====FACEBOOK LOGIN======");
-
-		 */
-    	 
-    	/* FB.login(function(response) {
- 			console.log('login , ' + JSON.stringify(response) + '.');
-        }); */
-    	 
-		 
-		 
-      
- 
-    } catch (e) {
-      console.log("login failed");
-      console.log(e);
-    }
-                                      
-}
-
-
-
-/********************
-Apply controllers to view 
-*********************/ 
-
-function renderItems(offers) {
-        $('#me .offer-list').html('');
-		console.log(JSON.stringify(offers));
-       $.each(offers, function(index) {
-       
-       
-			$('#me .offer-list').append($('<li/>', { //build a li element
-			    html: $('<a/>', { //with a A element inside it
-			            href: offers[index].datafile, //set the href for the link
-			            'data-rel': 'popup',
-			            html: '<img class"ui-li-icon" src="'
-			            	   +offers[index].datafile.substring(0, offers[index].datafile.length - 4)
-			            	   +'_thumb.jpg" />'
-			            	   +'<h3 class="ui-li-heading">'
-			            	   +offers[index].keywords+ '</h3>'
-			          })
-			})); 
-   
-        });
-        $('#me .offer-list').listview('refresh');
-       $('#me .offer-list a').click(function () {
-          $.mobile.loading('show',{
-          	text: 'Loading item...',
-          	textVisible: true,
-          	theme: 'b',
-          });
-        });   /*  */
-        
-
-        console.log($('#me .offer-list').html());
-        $.mobile.loading('hide');
-}
-
-
-
-
-
- 
- function testAPI() {
-    console.log('Welcome!  Fetching your information.... ');
-    FB.api('/me', function(response) {
-        console.log('Good to see you, ' + response.name + '.');
-    });
-}
-function onPhotoFail(error){
-  console.log(error);
-}
-
-  </script>
-  
-  
-  
-  
-  
-  
-  
-</body>
+<script src="libs/underscore.js"></script>   
+<script src="libs/backbone.js"></script>   
+<script src="libs/backbone-localstorage.js"></script>   
+<script src="js/offer.js"></script>
+<script src="js/routing.js"></script>    
+  </body>
 </html>

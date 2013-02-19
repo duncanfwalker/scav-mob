@@ -1,293 +1,180 @@
+_.templateSettings = {
+	interpolate : /\{\{(.+?)\}\}/g
+};
+
+var MyOffers, MyOffersPage, NewOffersPage, CurrentOffer;
+
 $(function() {
+	/***************************************************************************
+	 * Offer model
+	 **************************************************************************/
+	var Offer = Backbone.Model
+			.extend({
+				defaults : function() {
+					return {
+						title : "Item title",
+						item_id : "1",
+						datafile : "img/white/list.png",
+						created : new Date(),
+						end_date : ((new Date()).getTime() + (10 * 24 * 60 * 60 * 1000))
+					};
+				},
 
-	function Offer() {
-		this.item_id = "";
-		// update_params = {};
-		this.title = "";
-		this.image_local_uri = "";
-		this.image_remote_uri = "";
-	}
-	Offer.prototype.online = function(fields) {
-		return (this.item_id != "");
-	}
+				initialize : function() {
+					if (!this.get("title")) {
+						this.set({
+							"title" : this.defaults().title,
+							"item_id" : this.defaults().item_id,
+							"datafile" : this.defaults().datafile,
+							"end_date" : new Date(),
+							"created" : new Date()
+						// "end_date":10//(new Date())+1*24*60*60*1000
 
-	// for the fields passed, update the online draft offer with the apps local
-	// offer
-	Offer.prototype.sync = function(fields) {
-		var offer = this;
-		var update_params = {};
-		
-		if (fields != null) {
-			fields.each(function(i, element) {
-				update_params[element.id] = element.value;
-				if (element.id == 'image-src') {
-					offer.image_local_uri = element.value;
+						});
+
+					}
+
 				}
 			});
-		} else {
-			update_params = $('#give-offer').serializeArray();
-		}
-
-		if (this.item_id != "") {
-			update_params['item_id'] = this.item_id;
-		}
-
-		if (update_params['title']) {
-			this.title = update_params['title'];
-		}
-
-		var settings = new SettingsList();
-		update_params['username'] = SettingsList.get('username');
-		settings = null;
-
-		SC.api("/offer/offer_put", update_params, {
-			'type' : 'post'
-		}, function(data) {
-
-			console.log("Data response string: " + JSON.stringify(data));
-
-			offer.item_id = data.result.item_id;
-
-			if (offer.image_local_uri) {
-					offer.image_remote_uri = data.result.image.uri;
-			}
-			console.log("THIS offer after response: " + JSON.stringify(offer));
-		}, offer.image_local_uri);
-	};
-
-	Offer.prototype.publish = function() {
-		var update_params = {};
-		if (!this.online()) {
-			this.sync();
-		}
-		update_params['item_id'] = this.item_id;
-
-		SC.api("/offer/offer_publish", update_params, {
-			'type' : 'post'
-		}, function(data) {
-			console.log("DONE");
-		});
-
-		var params = {
-			method : 'feed',
-			// method: 'stream.publish',
-			name : this.title,
-			message : "FREE: " + this.title,
-			link : this.image_remote_uri,
-			picture : this.image_remote_uri,
-			caption : "Offered for free on scavenger.org.uk",
-			description : "I'm giving this away. Want it? Let me know. Or if you think you might know someone who wants this please share."
-		};
-
-		FB.api(
-						'me/feed',
-						'post',
-						params,
-						function(response) {
-							if (!response || response.error) {
-								alert('Sorry, there was a problem posting to Facebook. Check you are logged in.');
-							} else {
-								alert('Post ID: ' + response.id);
-							}
-							console.log("offer feed: ");
-							console.log("PARAMS: " + JSON.stringify(params));
-							console
-									.log("RESPONSE: "
-											+ JSON.stringify(response));
-						});
-		/*	       */
-
-	}
-
-	
-/************ Offer Form View ****************
- * 
- */	
-	
-	
-	function OfferFormView() {
-	
-		this.initialise();
-		var self = this;
-	
-		$("#make-offer").click(function(event) {
-			event.preventDefault();
-			alert("Thanks for offering!");
-			self.offer.publish();
-
-			
-			self.initialise();
-		}); // click
-
-
-		$('#give-offer input, #give-offer textarea').change(function(event) {
-			self.sync(event);
-		});
-		$('#photo-clear').click(this.clearThumb()); // click
-
-		$("#photo-get-new").click(function(event) {
-			navigator.camera.getPicture(function(imageURI) {
-				self.changeThumb(imageURI);
-			}, function() {
-			}, {
-				quality : 50,
-				targetWidth : 400,
-				targetHeight : 400,
-				destinationType : Camera.DestinationType.FILE_URI
-			}); // getpicture
-		}); // click
-
-		$("#photo-get-existing").click(function(event) {
-			navigator.camera.getPicture(function(imageURI) {
-				self.changeThumb(imageURI);
-			}, function() {
-			}, {
-				quality : 50,
-				destinationType : Camera.DestinationType.FILE_URI,
-				sourceType : Camera.PictureSourceType.PHOTOLIBRARY  
-			}); // get picture
-		}); // click
-	}
-
-	OfferFormView.prototype.changeThumb = function(imageURI) {
-		$('#image-src').val(imageURI);
-		$('#image-src').trigger('change');
-		this.showThumb(imageURI);
-	}
-
-	OfferFormView.prototype.sync = function(event) {
-		this.offer.sync($(event.target));
-	}
-
-	OfferFormView.prototype.initialise = function() {
-		$('#give-offer')[0].reset();
-		this.offer = new Offer();
-		this.clearThumb();
-	}
-
-	OfferFormView.prototype.clearThumb = function() {
-
-		$('#smallImage').css("display", "none");
-		$('.image-placeholder').show();
-		$('#image-chooser').show();
-		$('#image-editor').hide();
-		$('#new-offer-image-preview').width('29%');
-		$('#smallImage').attr("src", "");
-	}
-
-	OfferFormView.prototype.showThumb = function(imageURI) {
-		$('#smallImage').css("display", "block");
-		$('.image-placeholder').hide();
-		$('#image-chooser').hide();
-		$('#image-editor').show();
-		$('#new-offer-image-preview').width('100%');
-		$('#smallImage').attr("src", imageURI);
-	}
-	
-/************ Offer List View ****************
- * 
- */		
-	function OfferListView() {
-		var self =this;
-		$('#me').on('pageshow', function (event, ui) {
-			  $.mobile.loading('show',{
-			  	text: 'Loading...',
-			  	textVisible: true,
-			  	theme: 'b',
-			  });
-			  $.ajaxSetup({ cache: false });
-			  
-			  SC.api("/offer/offers_list",{username: SettingsList.get('username')},{'type':'GET'},
-					  function(offers) {
-				  		self.offer_list = offers;
-				  		self.renderItems();
-  			});
-		}); // show
-		
-		
-	}
-	
-	OfferListView.prototype.renderItems = function() {
-        $('#me .offer-list').html('');
-		console.log(JSON.stringify(this.offer_list));
-		
-	   var template = Hogan.compile($("#template-offer-list").html());
-	   $('#me .offer-list').append(template.render(this.offer_list));	
-		
-        $('#me .offer-list').listview('refresh');
-	//	$('div[id^="offer-"]').empty();
-		
- /*       $(document).on( "pagebeforechange", function( e, data ) {  	
-        	if ( typeof data.toPage === "string" ) {
-        		if ($(u.hash).length >0 ) {       			
-        		} else if ( u.hash.search(re) !== -1 ) {
-        		//	e.preventDefault();
-        			var offer_view = new OfferView(u);		
-        		} 
-        	}
-        });*/  
-        
-        $('#me .offer-list a').click(function (e) {
-           $.mobile.loading('show',{
-           	text: 'Loading item...',
-           	textVisible: true,
-           	theme: 'b',
-           });
-           
-           
-	   		var u = e.currentTarget,
-			re = /^#offer-/;       
-           
-	   		if ($(u.hash).length >0 ) {
-	   		 $.mobile.changePage($(u.hash),{'dataUrl':u.href});
-			} else if ( u.hash.search(re) !== -1 ) {
-				e.preventDefault();
-				var offer_view = new OfferView(u);
-				
-			} 
-         });    
-         
-
-         console.log($('#me .offer-list').html());
-         $.mobile.loading('hide');
-		
-	}
-	
-/************ Offer View ****************
- * 
- */		
-	function OfferView(u) {
-			this.model = new Offer();
-			this.id = u.hash.replace( /.*#offer-/, "" )
-			
-			this.render = function () {
-	
-					this.template = Hogan.compile($("#template-offer").html());
-			     	$.fn.jqmRemoveData('#offers div');
-		        	$('#offers').html('');
-					// $('#offers').children.slice(0,-3).remove();
-		        			        	
-				   $('#offers').append(this.template.render(this.model));	
-				   $('#offers '+u.hash).page();
-				   $.mobile.changePage($(u.hash),{'dataUrl':u.href});
-
-			}
-			
-			var self = this;
-			SC.api("/offer/offer_get",{item_id: this.id },{'type':'GET'},
-					  function(response) {
-				  		self.model = response.item;
-
-				  		self.render();
+	/***************************************************************************
+	 * OfferCollection model
+	 **************************************************************************/
+	var OfferCollection = Backbone.Collection.extend({
+		model : Offer,
+		localStorage : new Backbone.LocalStorage("scav-offers")
+	});
+	/***************************************************************************
+	 * OfferBrowseItem view
+	 **************************************************************************/
+	var OfferBrowseItem = Backbone.View.extend({
+		// collection: OfferCollection,
+		tagName : "li",
+		template : _.template($('#template-offer-item').html()),
+		render : function() {
+			this.$el.html(this.template(this.model.toJSON()));
+			this.$el.click(this, function(e) {
+				CurrentOffer = new OfferPage(e.data);
+				CurrentOffer.render();
 			});
-	}
-	
-	
-	
-	
-	
+			return this;
+		}
+	});
 
-	var OfferForm = new OfferFormView();
-	var OfferList = new OfferListView();
+	/***************************************************************************
+	 * OfferPage view
+	 **************************************************************************/
+	var OfferPage = Backbone.View.extend({
+		// collection: OfferCollection
+		el : $("#offers"),
+		template : _.template($('#template-offer').html()),
+		viewHelper : {
+			"daysleft" : function() {
+
+				var s, m, h, d;
+				var diff = new Date((this.end_date - (new Date()))) / 1000; // diff
+																			// in
+																			// seconds
+																			// now
+				s = Math.floor(diff % 60);
+				diff = diff / 60;
+				m = Math.floor(diff % 60);
+				diff = diff / 60;
+				h = Math.floor(diff % 24);
+				d = Math.floor(diff / 24);
+
+				if (d > 0) {
+					return d + " day(s)";
+				} else if (h > 0) {
+					return h + " hour(s)";
+				} else {
+					return h + " min(s), " + s + " secs";
+				}
+			}
+		},
+		render : function() {
+			var data = this.model.toJSON();
+			_.extend(data, this.viewHelper);
+
+			$("#offers").html(this.template(data)); // this.model.toJSON()
+			$.mobile.changePage($('#offer-' + this.model.attributes.item_id));
+			return this;
+		}
+	});
+
+	/***************************************************************************
+	 * Offer Browse view
+	 **************************************************************************/
+	var OfferBrowseView = Backbone.View.extend({
+		el : $("#my-offers-browser"),
+		collection : MyOffers,
+		initialize : function() {
+			this.collection = MyOffers;
+			// this.render();
+		},
+
+		render : function() {
+			this.$el.html('');
+			var that = this;
+			_.each(this.collection.models, function(item) {
+				console.log(JSON.stringify(item));
+				that.renderOffer(item);
+			}, this);
+			$(this.el).listview('refresh');
+		},
+
+		renderOffer : function(item) {
+			var offerView = new OfferBrowseItem({
+				model : item
+			});
+			this.$el.append(offerView.render().el);
+		}
+
+	});
+	/***************************************************************************
+	 * Offer Create View
+	 **************************************************************************/
+	var OfferCreateView = Backbone.View.extend({
+		model : Offer,
+		initialize : function() {
+			model = new Offer();
+			$('#make-offer').on('click', function() {
+				MyOffers.add(model);
+				model = new Offer();
+			});
+
+			$('#give-offer input, #give-offer textarea')
+					.on(
+							'change',
+							function(event) {
+								var target = event.target;
+								console.log('changing ' + target.id + ' from: '
+										+ target.defaultValue + ' to: '
+										+ target.value);
+
+								model.set({
+									title : $('#title').val(),
+									description : $('#description').val()
+								});
+
+							});
+		}
+
+	});
+
+	// MyOfferList.create({title: 'test'});
+	/*
+	 * $('#me').on('pageshow', function (event, ui) { MyOffersPage.render(); });
+	 * $('#give').on('pageshow', function (event, ui) { NewOffersPage.render();
+	 * });
+	 */
+
+	/*
+	 * $('#me').on('click', function (event, ui) {
+	 * MyOffersPage.collection.add(); });
+	 */
+
+	MyOffers = new OfferCollection();
+	MyOffersPage = new OfferBrowseView();
+	NewOffersPage = new OfferCreateView();
 
 });
